@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pages/LoginReg.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,12 +11,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //return page with only background image in the folder assets/login_bg.png . file name is "login_bg.png" .no  any other button
     return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World'),
-        ),
-      ),
+      home: LoginReg(),
     );
   }
 }
