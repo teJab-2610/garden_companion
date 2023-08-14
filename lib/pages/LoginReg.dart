@@ -79,42 +79,54 @@ class _LoginRegState extends State<LoginReg> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 30,
               ),
-              const Divider(
-                color: Color.fromARGB(255, 3, 36, 1),
-                thickness: 2,
-                indent: 50,
-                endIndent: 50,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Or Login with',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Poppins',
+              //divider with text in Between lines
+
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        thickness: 2,
+                        color: Color.fromARGB(255, 3, 36, 1),
+                        indent: 30,
+                        endIndent: 2,
+                      ),
+                    ),
+                    Text(
+                      'Or Login with',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        thickness: 2,
+                        color: Color.fromARGB(255, 3, 36, 1),
+                        indent: 2,
+                        endIndent: 30,
+                      ),
+                    ),
+                  ],
                 ),
               ),
+
               const SizedBox(
-                height: 1,
+                height: 4,
               ),
               ElevatedButton(
                 onPressed: () {
                   //login with google
                   Ggl_signIn().signInWithGoogle();
                 },
-                //Custom google logo as button
+                //Custom google logo as button without borders
 
                 style: ElevatedButton.styleFrom(
                   primary: Colors.transparent,
-                  minimumSize: const Size(300, 50),
-                  //add outline to the box
-                  side: const BorderSide(
-                    color: Colors.white,
-                    width: 2,
-                  ),
+                  minimumSize: const Size(100, 50),
                   elevation: 0,
                   textStyle: const TextStyle(
                     fontFamily: 'Poppins',
@@ -126,29 +138,20 @@ class _LoginRegState extends State<LoginReg> {
                   height: 30,
                   width: 30,
                 ),
-                //Transparent Button with custom Google Logo image saying and text saying google
-                /*
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/google_logo.png',
-                      height: 30,
-                      width: 30,
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    const Text(
-                      'Google',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Poppins',
-                      ),
-                    ),
-                  ],
-                ),
-                */
+                // style: ElevatedButton.styleFrom(
+                //   primary: Colors.transparent,
+                //   minimumSize: const Size(300, 50),
+                //   //add outline to the box
+                //   side: const BorderSide(
+                //     color: Colors.white,
+                //     width: 2,
+                //   ),
+                //   elevation: 0,
+                //   textStyle: const TextStyle(
+                //     fontFamily: 'Poppins',
+                //     fontSize: 25,
+                //   ),
+                // ),
               ),
             ],
           ),
