@@ -4,6 +4,7 @@ Else will be taken to login page if already has an accout or registration page i
 This page also includes option to login with google 
 */
 import 'package:flutter/material.dart';
+import 'package:garden_companion/auth/google_signIn.dart';
 import 'Login.dart';
 import 'Register.dart';
 
@@ -101,7 +102,8 @@ class _LoginRegState extends State<LoginReg> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/google');
+                  //login with google
+                  Ggl_signIn().signInWithGoogle();
                 },
                 //Custom google logo as button
 

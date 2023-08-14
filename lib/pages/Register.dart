@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'textfield.dart';
+import '../components/textfield.dart';
+import '../components/my_button2.dart';
 
 class Register extends StatelessWidget {
   Register({super.key});
@@ -8,6 +9,8 @@ class Register extends StatelessWidget {
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
+
+  void register() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -24,46 +27,44 @@ class Register extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Text(
+                'Register',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 40,
+                  color: Colors.white,
+                ),
+              ),
               //username textfield
               MyTextField(
                 hintText: 'Username',
                 controller: usernameController,
+                obscureText: false,
               ),
               //password textfield
               MyTextField(
                 hintText: 'Password',
                 controller: passwordController,
+                obscureText: true,
               ),
               //email textfield
               MyTextField(
                 hintText: 'Email',
                 controller: emailController,
+                obscureText: false,
               ),
               //phone textfield
               MyTextField(
                 hintText: 'Phone',
                 controller: phoneController,
+                obscureText: false,
               ),
-              //login button
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/home');
+              //register button
+              MyButton2(
+                text: 'Register',
+                onTap: () {
+                  register();
                 },
-                style: ElevatedButton.styleFrom(
-                  primary: Color.fromARGB(255, 3, 36, 1),
-                  minimumSize: const Size(300, 50),
-                  //add outline to the box
-                  side: const BorderSide(
-                    color: Colors.white,
-                    width: 2,
-                  ),
-                  elevation: 0,
-                  textStyle: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 25,
-                  ),
-                ),
-                child: const Text('REGISTER'),
               ),
             ],
           ),

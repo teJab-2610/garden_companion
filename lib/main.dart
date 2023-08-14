@@ -1,7 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'pages/LoginReg.dart';
+import 'package:garden_companion/firebase_options.dart';
+import 'auth/auth_page.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -13,7 +19,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //return page with only background image in the folder assets/login_bg.png . file name is "login_bg.png" .no  any other button
     return const MaterialApp(
-      home: LoginReg(),
+      debugShowCheckedModeBanner: false,
+      home: AuthPage(),
     );
   }
 }

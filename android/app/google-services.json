@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "402219795191",
+    "project_id": "garden-companion-1d9eb",
+    "storage_bucket": "garden-companion-1d9eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402219795191:android:4255011c905be152dfc9f2",
+        "android_client_info": {
+          "package_name": "com.example.garden_companion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "402219795191-gi67ltrp0ft3eb2bqqqcl9t6vkdihv4j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpeajkuzudjbLZetdHxoLOYXuPPfpUA_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "402219795191-d9qrfflpc98efpopdgpmve2uv4pumfmh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "402219795191-g5iblli1s2ab0ortqhoep879426l128a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gardenCompanion.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
