@@ -1,3 +1,8 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
 class MyUser {
   final String username;
   final String password;
@@ -7,12 +12,37 @@ class MyUser {
   final int followersCount;
   final int postsCount;
 
-  MyUser(
-      {required this.username,
-      required this.password,
-      required this.email,
-      required this.phoneNumber,
-      required this.followingCount,
-      required this.followersCount,
-      required this.postsCount});
+  MyUser({
+    required this.username,
+    required this.password,
+    required this.email,
+    required this.phoneNumber,
+    required this.followingCount,
+    required this.followersCount,
+    required this.postsCount,
+  });
+
+  factory MyUser.fromJson(Map<String, dynamic> json) {
+    return MyUser(
+      username: json['username'],
+      password: json['password'],
+      email: json['email'],
+      phoneNumber: json['phoneNumber'],
+      followingCount: json['followingCount'],
+      followersCount: json['followersCount'],
+      postsCount: json['postsCount'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'username': username,
+      'password': password,
+      'email': email,
+      'phoneNumber': phoneNumber,
+      'followingCount': followingCount,
+      'followersCount': followersCount,
+      'postsCount': postsCount,
+    };
+  }
 }
