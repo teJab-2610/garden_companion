@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/user_provider.dart';
+import '../home/home_page.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -103,16 +104,12 @@ class _RegisterPageState extends State<RegisterPage> {
         final userProvider = Provider.of<UserProvider>(context, listen: false);
 
         try {
-          // Perform user registration process and obtain userId and email
-          // String userId = ...; // Obtain the user's unique ID
-          // String email = ...;  // Obtain the user's email
-
-          // Call the registerUser method to add user data to Firebase collection
           await userProvider.registerUser(
               _emailController.text, _passwordController.text);
-
-          // Registration successful, navigate to the home screen or another screen
-          Navigator.pushReplacementNamed(context, '/home');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
         } catch (error) {
           // Handle registration error
           print('Error during registration: $error');

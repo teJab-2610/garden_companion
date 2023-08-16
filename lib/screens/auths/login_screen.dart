@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garden_companion_2/screens/auths/register_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../providers/auth_provider.dart';
 import '../home/home_page.dart';
 
@@ -16,7 +17,19 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<AuthProvider>(context, listen: false).loadRememberMe();
+    _loadRememberMe();
+  }
+
+  void _loadRememberMe() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool rememberMe = prefs.getBool('rememberMe') ?? false;
+
+    if (rememberMe) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    }
   }
 
   @override
@@ -105,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildLoginButton() {
     return ElevatedButton(
       onPressed: () => _onLoginPressed(context),
-      child: Text('Login'),
+      child: const Text('Login'),
     );
   }
 
