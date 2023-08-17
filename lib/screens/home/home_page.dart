@@ -16,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   void _logout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+    await _auth.signOut();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => LoginPage()),

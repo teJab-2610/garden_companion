@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:garden_companion_2/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -9,44 +10,106 @@ class UserProvider with ChangeNotifier {
   late SharedPreferences _prefs;
   late FirebaseFirestore _firestore;
 
-  String? _userId;
-  String? _email;
-  int _followersCount = 0;
-  int _followingCount = 0;
-  int _postsCount = 0;
-
-  String? get userId => _userId;
-  String? get email => _email;
-  int get followersCount => _followersCount;
-  int get followingCount => _followingCount;
-  int get postsCount => _postsCount;
+  MyUser _userProfile = MyUser(
+    username: '',
+    email: '',
+    followersCount: 0,
+    followingCount: 0,
+    postsCount: 0,
+    password: '',
+    phoneNumber: '',
+  );
+  MyUser get userProfile => _userProfile; // Add this getter
 
   UserProvider() {
     _initPreferences();
-    _firestore = FirebaseFirestore.instance;
   }
 
   Future<void> _initPreferences() async {
     _prefs = await SharedPreferences.getInstance();
-    _userId = _prefs.getString('userId');
-    _email = _prefs.getString('email');
-    _followersCount = _prefs.getInt('followersCount') ?? 0;
-    _followingCount = _prefs.getInt('followingCount') ?? 0;
-    _postsCount = _prefs.getInt('postsCount') ?? 0;
+    _loadUserProfile();
+  }
+
+  Future<void> _loadUserProfile() async {
+    final userId = _prefs.getString('userId') ?? '';
+    final email = _prefs.getString('email') ?? '';
+    final followersCount = _prefs.getInt('followersCount') ?? 0;
+    final followingCount = _prefs.getInt('followingCount') ?? 0;
+    final postsCount = _prefs.getInt('postsCount') ?? 0;
+
+    _userProfile = MyUser(
+      username: userId,
+      email: email,
+      followersCount: followersCount,
+      followingCount: followingCount,
+      postsCount: postsCount,
+      password: '',
+      phoneNumber: '',
+    );
+
     notifyListeners();
   }
 
-  Future<void> registerUser(String userId, String email) async {
-    _userId = userId;
-    _email = email;
+  Future<void> fetchUserProfile() async {
+    try {
+      final User? currentUser = _auth.currentUser;
+      if (currentUser != null) {
+        final DocumentSnapshot<Map<String, dynamic>> userDoc =
+            await _firestore.collection('users').doc(currentUser.uid).get();
 
-    await _prefs.setString('userId', userId);
-    await _prefs.setString('email', email);
-    await _prefs.setInt('followersCount', _followersCount);
-    await _prefs.setInt('followingCount', _followingCount);
-    await _prefs.setInt('postsCount', _postsCount);
+        final int followersCount = userDoc['followersCount'];
+        final int followingCount = userDoc['followingCount'];
+        final int postsCount = userDoc['postsCount'];
 
+        _userProfile = MyUser(
+          username: currentUser.uid,
+          email: currentUser.email!,
+          followersCount: followersCount,
+          followingCount: followingCount,
+          postsCount: postsCount,
+          password: '',
+          phoneNumber: '',
+        );
+
+        // Update shared preferences
+        await _prefs.setString('userId', currentUser.uid);
+        await _prefs.setString('email', currentUser.email!);
+        await _prefs.setInt('followersCount', followersCount);
+        await _prefs.setInt('followingCount', followingCount);
+        await _prefs.setInt('postsCount', postsCount);
+
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Error fetching user profile: $e');
+    }
+  }
+
+  Future<void> registerUser(
+    String userId,
+    String email,
+    String username, // Add this parameter
+  ) async {
+    _userProfile = MyUser(
+      username: userId,
+      email: email,
+      followersCount: 0,
+      followingCount: 0,
+      postsCount: 0,
+      password: '',
+      phoneNumber: '',
+    );
+
+    await _saveUserDataToPreferences();
     notifyListeners();
+  }
+
+  Future<void> _saveUserDataToPreferences() async {
+    await _prefs.setString('userId', _userProfile.username);
+    await _prefs.setString('email', _userProfile.email);
+    await _prefs.setInt('followersCount', _userProfile.followersCount);
+    await _prefs.setInt('followingCount', _userProfile.followingCount);
+    await _prefs.setInt('postsCount', _userProfile.postsCount);
   }
 
   Future<bool> isFollowingUser(String userId) async {
