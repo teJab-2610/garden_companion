@@ -4,9 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserProvider with ChangeNotifier {
+  final User _currentUser = FirebaseAuth.instance.currentUser!;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   late SharedPreferences _prefs;
   late FirebaseFirestore _firestore;
-  late FirebaseAuth _auth;
 
   String? _userId;
   String? _email;
@@ -48,59 +49,102 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateUserCounts(
-      {int? followers, int? following, int? posts}) async {
-    if (followers != null) {
-      _followersCount = followers;
-      await _prefs.setInt('followersCount', _followersCount);
-    }
-    if (following != null) {
-      _followingCount = following;
-      await _prefs.setInt('followingCount', _followingCount);
-    }
-    if (posts != null) {
-      _postsCount = posts;
-      await _prefs.setInt('postsCount', _postsCount);
-    }
-
-    notifyListeners();
-  }
-
-  Future<void> addFollower(String followerUserId) async {
+  Future<bool> isFollowingUser(String userId) async {
+    print('inside isFollowingUser ${userId}');
     try {
-      final currentUser = _auth.currentUser!;
-      final userDocRef = _firestore.collection('users').doc(currentUser.uid);
-      final followerUserDocRef =
-          _firestore.collection('users').doc(followerUserId);
+      DocumentSnapshot followingSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_currentUser.uid)
+          .collection('following')
+          .doc(userId)
+          .get();
 
-      // Add follower's data to the user's followers subcollection
-      await userDocRef.collection('followers').doc(followerUserId);
-
-      // Update the user's followers count
-      _followersCount++;
-      await _prefs.setInt('followersCount', _followersCount);
-
-      notifyListeners();
-    } catch (error) {
-      throw error.toString();
+      return followingSnapshot.exists;
+    } catch (e) {
+      print('Error checking if user is following: $e');
+      return false;
     }
   }
 
-  Future<void> unfollowUser(String followerUserId) async {
+  Future<void> updateFollowerCount(String userId, bool increment) async {
     try {
-      final currentUser = _auth.currentUser!;
-      final userDocRef = _firestore.collection('users').doc(currentUser.uid);
+      DocumentReference userRef =
+          FirebaseFirestore.instance.collection('users').doc(userId);
 
-      // Remove follower's data from the user's followers subcollection
-      await userDocRef.collection('followers').doc(followerUserId).delete();
+      await userRef.update({
+        'followerCount': FieldValue.increment(increment ? 1 : -1),
+      });
 
-      // Update the user's followers count
-      _followersCount--;
-      await _prefs.setInt('followersCount', _followersCount);
+      print('Follower count updated successfully');
 
+      // Notify listeners that the follower count has changed
       notifyListeners();
-    } catch (error) {
-      throw error.toString();
+    } catch (e) {
+      print('Error updating follower count: $e');
+    }
+  }
+
+  Future<void> updateFollowingCount(String userId, bool increment) async {
+    try {
+      DocumentReference userRef =
+          FirebaseFirestore.instance.collection('users').doc(userId);
+
+      await userRef.update({
+        'followingCount': FieldValue.increment(increment ? 1 : -1),
+      });
+      print('Follower count updated successfully');
+      notifyListeners();
+    } catch (e) {
+      print('Error updating follower count: $e');
+    }
+  }
+
+  Future<void> followUser(String otherID) async {
+    print('inside followUser ${otherID}');
+    try {
+      User? currentUser = _auth.currentUser;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser!.uid)
+          .collection('following')
+          .doc(otherID)
+          .set({'userId': otherID});
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(otherID)
+          .collection('followers')
+          .doc(currentUser.uid)
+          .set({'userId': currentUser.uid});
+
+      await updateFollowingCount(currentUser.uid, true);
+      await updateFollowerCount(otherID, true);
+    } catch (e) {
+      print('Error following user: $e');
+    }
+  }
+
+  Future<void> unFollowing(String otherID) async {
+    print('inside unFollowing ${otherID}');
+    try {
+      User? currentUser = _auth.currentUser;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser!.uid)
+          .collection('following')
+          .doc(otherID)
+          .delete();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(otherID)
+          .collection('followers')
+          .doc(currentUser.uid)
+          .delete();
+
+      print('Followed user successfully');
+      await updateFollowingCount(currentUser.uid, false);
+      await updateFollowerCount(otherID, false);
+    } catch (e) {
+      print('Error following user: $e');
     }
   }
 

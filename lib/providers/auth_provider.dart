@@ -14,24 +14,6 @@ class AuthProvider with ChangeNotifier {
   User? get currentUser => _currentUser;
   bool get rememberMe => _rememberMe;
 
-  // Future<void> checkLoggedInStatus() async {
-  //   try {
-  //     SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     bool rememberMe = prefs.getBool('rememberMe') ?? false;
-
-  //     if (rememberMe) {
-  //       final User? user = _auth.currentUser;
-
-  //       if (user != null) {
-  //         _currentUser = user;
-  //         notifyListeners();
-  //       }
-  //     }
-  //   } catch (error) {
-  //     print('Error checking logged in status: $error');
-  //   }
-  // }
-
   Future<void> login(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -55,14 +37,6 @@ class AuthProvider with ChangeNotifier {
       );
       if (userCredential.user != null) {
         String userId = userCredential.user!.uid;
-//add new userID to users collection in firestore
-
-        // // Create a document for the user in a Firestore collection
-        // await _firestore.collection('users').doc(userId).set({
-        //   'email': email, 'followersCount': 0, 'followingCount': 0,
-        //   'password': password, 'postsCount': 0, 'userId': ""
-        //   // Add more user data fields as needed
-        // });
 
         final userDocRef = _firestore.collection('users').doc(userId);
         final userDoc = await userDocRef.get();
@@ -87,6 +61,24 @@ class AuthProvider with ChangeNotifier {
             'postsCount': 0,
             'userId': ""
           });
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('followers')
+              .doc('dummy')
+              .set({});
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('following')
+              .doc('dummy')
+              .set({});
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('posts')
+              .doc('dummy')
+              .set({});
         }
 
         // Notify listeners about successful registration

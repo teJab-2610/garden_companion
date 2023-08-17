@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:garden_companion_2/providers/auth_provider.dart';
 import 'package:garden_companion_2/providers/user_provider.dart';
 import 'package:garden_companion_2/screens/auths/login_screen.dart';
+import 'package:garden_companion_2/screens/profile_screens/others_accout.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
