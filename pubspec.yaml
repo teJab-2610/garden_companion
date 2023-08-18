@@ -43,7 +43,8 @@ dependencies:
   font_awesome_flutter: ^9.1.0
   provider: ^6.0.5
   shared_preferences: ^2.2.0
-  #cloud_firestore: ^4.8.4
+  http: ^1.1.0
+  cloud_firestore: ^4.8.4
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +65,8 @@ flutter:
   assets:
     - assets/images/login_bg.png
     - assets/images/google_logo.png
+    - assets/images/app_intro.jpg
+
 
 
   # The following line ensures that the Material Icons font is
