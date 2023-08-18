@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "645779248201",
+    "firebase_url": "https://gardencompanion2-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "gardencompanion2",
     "storage_bucket": "gardencompanion2.appspot.com"
   },
@@ -14,7 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "645779248201-3r7t0s52fhcb4t0ntfk4r8qt3vn9i7bt.apps.googleusercontent.com",
+          "client_id": "645779248201-3ug4vjpd8c4so2tprphs6cglg6rk051o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.garden_companion_2",
+            "certificate_hash": "bbe2925591fa5082287280822d194019ef20006b"
+          }
+        },
+        {
+          "client_id": "645779248201-taifntaha1d86v4if4p2c5jtjk4pn7no.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

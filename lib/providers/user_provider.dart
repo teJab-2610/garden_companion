@@ -19,7 +19,7 @@ class UserProvider with ChangeNotifier {
     password: '',
     phoneNumber: '',
   );
-  MyUser get userProfile => _userProfile; // Add this getter
+  MyUser get userProfile => _userProfile;
 
   UserProvider() {
     _initPreferences();
@@ -27,16 +27,23 @@ class UserProvider with ChangeNotifier {
 
   Future<void> _initPreferences() async {
     _prefs = await SharedPreferences.getInstance();
-    _loadUserProfile();
+
+    final userId = _prefs.getString('email');
+    //print the userID
+    print('inside _initPreferences ${userId}');
+    if (userId == null) {
+      await fetchUserProfile(); // Fetch data from Firebase
+    } else {
+      _loadUserProfile(); // Load cached data from shared preferences
+    }
   }
 
   Future<void> _loadUserProfile() async {
-    final userId = _prefs.getString('userId') ?? '';
-    final email = _prefs.getString('email') ?? '';
-    final followersCount = _prefs.getInt('followersCount') ?? 0;
-    final followingCount = _prefs.getInt('followingCount') ?? 0;
-    final postsCount = _prefs.getInt('postsCount') ?? 0;
-
+    final String userId = _prefs.getString('userId')!;
+    final String email = _prefs.getString('email')!;
+    final int followersCount = _prefs.getInt('followersCount')!;
+    final int followingCount = _prefs.getInt('followingCount')!;
+    final int postsCount = _prefs.getInt('postsCount')!;
     _userProfile = MyUser(
       username: userId,
       email: email,
@@ -46,7 +53,6 @@ class UserProvider with ChangeNotifier {
       password: '',
       phoneNumber: '',
     );
-
     notifyListeners();
   }
 
@@ -54,6 +60,8 @@ class UserProvider with ChangeNotifier {
     try {
       final User? currentUser = _auth.currentUser;
       if (currentUser != null) {
+        _firestore = FirebaseFirestore.instance; // Initialize _firestore
+
         final DocumentSnapshot<Map<String, dynamic>> userDoc =
             await _firestore.collection('users').doc(currentUser.uid).get();
 
@@ -71,7 +79,6 @@ class UserProvider with ChangeNotifier {
           phoneNumber: '',
         );
 
-        // Update shared preferences
         await _prefs.setString('userId', currentUser.uid);
         await _prefs.setString('email', currentUser.email!);
         await _prefs.setInt('followersCount', followersCount);
@@ -88,7 +95,7 @@ class UserProvider with ChangeNotifier {
   Future<void> registerUser(
     String userId,
     String email,
-    String username, // Add this parameter
+    String username,
   ) async {
     _userProfile = MyUser(
       username: userId,

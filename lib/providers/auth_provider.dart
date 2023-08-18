@@ -91,25 +91,94 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<void> createGoogleProfile(String userId, String email) async {
+    try {
+      await _firestore.collection('users').doc(userId).set({
+        'email': email,
+      });
+
+      final userDocRef = _firestore.collection('users').doc(userId);
+      await userDocRef.set({
+        'email': email,
+        'followersCount': 0,
+        'followingCount': 0,
+        'password': "NA",
+        'postsCount': 0,
+        'userId': ""
+      });
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('followers')
+          .doc('dummy')
+          .set({});
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('following')
+          .doc('dummy')
+          .set({});
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('posts')
+          .doc('dummy')
+          .set({});
+
+      print('User profile created');
+    } catch (e) {
+      print('Error creating user profile: $e');
+    }
+  }
+
+  Future<bool> checkUserExists(String email) async {
+    try {
+      final querySnapshot = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      return querySnapshot.docs.isNotEmpty;
+    } catch (e) {
+      print('Error checking user existence: $e');
+      return false;
+    }
+  }
+
   Future<void> loginWithGoogle() async {
     try {
+      await _googleSignIn.signOut();
       final GoogleSignInAccount? googleSignInAccount =
           await _googleSignIn.signIn();
+
       if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuth =
+        final GoogleSignInAuthentication googleSignInAuthentication =
             await googleSignInAccount.authentication;
         final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleSignInAuth.accessToken,
-          idToken: googleSignInAuth.idToken,
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
         );
-
         final UserCredential userCredential =
             await _auth.signInWithCredential(credential);
-        _currentUser = userCredential.user;
-        notifyListeners();
+        final myuser = userCredential.user;
+        if (myuser != null) {
+          final email = myuser.email;
+          final userExists = await checkUserExists(email!);
+          if (userExists) {
+            final UserCredential userCredential =
+                await _auth.signInWithCredential(credential);
+            _currentUser = userCredential.user;
+            print('User already registered');
+          } else {
+            print('User uid ${myuser.uid}');
+            await createGoogleProfile(myuser.uid, email);
+          }
+        }
+      } else {
+        print('Google Sign-In failed or cancelled.');
       }
-    } catch (error) {
-      throw error.toString();
+    } catch (e) {
+      print('Error signing in with Google: $e');
     }
   }
 
