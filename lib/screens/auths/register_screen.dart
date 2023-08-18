@@ -181,6 +181,7 @@ class _RegisterPageState extends State<RegisterPage> {
       onPressed: () => _onRegisterPressed(context),
       style: ElevatedButton.styleFrom(
         primary: Color.fromARGB(255, 91, 142, 85),
+
         padding: const EdgeInsets.symmetric(horizontal: 132, vertical: 20),
       ),
       child: Text(
