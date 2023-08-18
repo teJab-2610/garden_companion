@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:garden_companion_2/screens/auths/login_screen.dart';
 import 'package:garden_companion_2/screens/home/search_screen.dart';
 import 'package:garden_companion_2/screens/profile_screens/profile_screen.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,11 +17,12 @@ class _HomePageState extends State<HomePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     await _auth.signOut();
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginPage()));
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
+    // Clear route history
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
   }
 
   void _navigateToSearchPage(BuildContext context) {

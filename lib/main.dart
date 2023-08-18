@@ -2,8 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:garden_companion_2/providers/auth_provider.dart';
 import 'package:garden_companion_2/providers/user_provider.dart';
-import 'package:garden_companion_2/screens/auths/login_screen.dart';
-import 'package:garden_companion_2/screens/profile_screens/others_accout.dart';
+import 'package:garden_companion_2/screens/home/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Login with Shared Preferences',
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: LoginPage(),
+        home: SplashScreen(),
       ),
     );
   }
