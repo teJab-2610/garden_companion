@@ -4,8 +4,12 @@ import 'package:garden_companion_2/screens/auths/login_screen.dart';
 import 'package:garden_companion_2/screens/home/search_screen.dart';
 import 'package:garden_companion_2/screens/profile_screens/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:camera/camera.dart';
+import 'camera_screen.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -18,37 +22,47 @@ class _HomePageState extends State<HomePage> {
     await prefs.clear();
     await _auth.signOut();
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginPage()));
+        context, MaterialPageRoute(builder: (context) => const LoginPage()));
 
     // Clear route history
     Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
+        MaterialPageRoute(builder: (context) => const LoginPage()), (route) => false);
   }
 
   void _navigateToSearchPage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SearchPage()),
+      MaterialPageRoute(builder: (context) => const SearchPage()),
     );
   }
 
   void _navigateToProfilePage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ProfileScreen()),
+      MaterialPageRoute(builder: (context) => const ProfileScreen()),
+    );
+  }
+
+  void _navigateToCameraPage(BuildContext context) async {
+    final cameras = await availableCameras();
+    final firstCamera = cameras.first;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CameraScreen(camera: firstCamera)),
     );
   }
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      title: Text('Home Page '),
+      title: const Text('Home Page '),
       actions: [
         IconButton(
-          icon: Icon(Icons.logout),
+          icon: const Icon(Icons.logout),
           onPressed: () => _logout(context),
         ),
         IconButton(
-          icon: Icon(Icons.search),
+          icon: const Icon(Icons.search),
           onPressed: () => _navigateToSearchPage(context),
         ),
       ],
@@ -63,12 +77,18 @@ class _HomePageState extends State<HomePage> {
           label: 'Home',
         ),
         BottomNavigationBarItem(
+          icon: Icon(Icons.camera_enhance),
+          label: 'Camera',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: 'Profile',
         ),
       ],
       onTap: (index) {
         if (index == 1) {
+          _navigateToCameraPage(context);
+        } else if (index == 2) {
           _navigateToProfilePage(context);
         }
       },

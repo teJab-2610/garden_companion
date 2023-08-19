@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -21,15 +23,15 @@ class _RegisterPageState extends State<RegisterPage> {
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildAppLogo(),
                 _buildHeading(),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildDescription(), // Added description
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 _buildRegisterForm(),
               ],
             ),
@@ -40,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _buildAppLogo() {
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Icon(
@@ -64,10 +66,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildHeading() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: RichText(
         textAlign: TextAlign.left,
-        text: TextSpan(
+        text: const TextSpan(
           text: 'Register on ',
           style: TextStyle(
             fontFamily: 'Sf',
@@ -93,10 +95,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildDescription() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: RichText(
         textAlign: TextAlign.left,
-        text: TextSpan(
+        text: const TextSpan(
           text: 'Create an account. We can\'t wait to have you',
           style: TextStyle(
             fontFamily: 'Sf',
@@ -115,9 +117,9 @@ class _RegisterPageState extends State<RegisterPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _buildEmailTextField(),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           _buildPasswordTextField(),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           _buildRegisterButton(),
         ],
       ),
@@ -128,7 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Email',
         filled: true,
         fillColor: Color.fromARGB(255, 247, 250, 244),
@@ -150,8 +152,8 @@ class _RegisterPageState extends State<RegisterPage> {
       decoration: InputDecoration(
         labelText: 'Password',
         filled: true,
-        fillColor: Color.fromARGB(255, 247, 250, 244),
-        prefixIcon: Icon(Icons.lock, color: Color.fromARGB(255, 91, 142, 85)),
+        fillColor: const Color.fromARGB(255, 247, 250, 244),
+        prefixIcon: const Icon(Icons.lock, color: Color.fromARGB(255, 91, 142, 85)),
         suffixIcon: GestureDetector(
           onTap: () {
             setState(() {
@@ -180,11 +182,11 @@ class _RegisterPageState extends State<RegisterPage> {
     return ElevatedButton(
       onPressed: () => _onRegisterPressed(context),
       style: ElevatedButton.styleFrom(
-        primary: Color.fromARGB(255, 91, 142, 85),
+        backgroundColor: const Color.fromARGB(255, 91, 142, 85),
 
         padding: const EdgeInsets.symmetric(horizontal: 132, vertical: 20),
       ),
-      child: Text(
+      child: const Text(
         'REGISTER',
         style: TextStyle(fontSize: 16, fontFamily: 'Sf'),
       ),
@@ -213,12 +215,12 @@ class _RegisterPageState extends State<RegisterPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Error'),
+        title: const Text('Error'),
         content: Text(message),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),

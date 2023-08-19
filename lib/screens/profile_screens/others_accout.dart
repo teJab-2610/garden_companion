@@ -6,7 +6,7 @@ import '../../providers/user_provider.dart';
 class OtherAccountPage extends StatefulWidget {
   final String documentId;
 
-  OtherAccountPage({required this.documentId});
+  const OtherAccountPage({super.key, required this.documentId});
 
   @override
   _OtherAccountPageState createState() => _OtherAccountPageState();

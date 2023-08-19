@@ -30,7 +30,7 @@ class UserProvider with ChangeNotifier {
 
     final userId = _prefs.getString('email');
     //print the userID
-    print('inside _initPreferences ${userId}');
+    print('inside _initPreferences $userId');
     if (userId == null) {
       await fetchUserProfile(); // Fetch data from Firebase
     } else {
@@ -120,7 +120,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<bool> isFollowingUser(String userId) async {
-    print('inside isFollowingUser ${userId}');
+    print('inside isFollowingUser $userId');
     try {
       DocumentSnapshot followingSnapshot = await FirebaseFirestore.instance
           .collection('users')
@@ -170,7 +170,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> followUser(String otherID) async {
-    print('inside followUser ${otherID}');
+    print('inside followUser $otherID');
     try {
       User? currentUser = _auth.currentUser;
       await FirebaseFirestore.instance
@@ -194,7 +194,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> unFollowing(String otherID) async {
-    print('inside unFollowing ${otherID}');
+    print('inside unFollowing $otherID');
     try {
       User? currentUser = _auth.currentUser;
       await FirebaseFirestore.instance
