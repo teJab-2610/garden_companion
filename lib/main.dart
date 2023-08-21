@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:garden_companion_2/providers/auth_provider.dart';
+import 'package:garden_companion_2/providers/post_provider.dart';
 import 'package:garden_companion_2/providers/user_provider.dart';
 import 'package:garden_companion_2/screens/home/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => PostProvider()),
       ],
       child: MaterialApp(
         title: 'Login with Shared Preferences',

@@ -145,8 +145,9 @@ class _LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
         labelText: 'Password',
         filled: true,
-        fillColor: Color.fromARGB(255, 247, 250, 244),
-        prefixIcon: Icon(Icons.lock, color: Color.fromARGB(255, 91, 142, 85)),
+        fillColor: const Color.fromARGB(255, 247, 250, 244),
+        prefixIcon:
+            const Icon(Icons.lock, color: Color.fromARGB(255, 91, 142, 85)),
         suffixIcon: GestureDetector(
           onTap: () {
             setState(() {

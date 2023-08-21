@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:garden_companion_2/providers/user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -20,7 +21,6 @@ class AuthProvider with ChangeNotifier {
         email: email,
         password: password,
       );
-
       _currentUser = userCredential.user;
       notifyListeners();
     } catch (error) {
@@ -28,7 +28,8 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<void> register(String email, String password) async {
+  Future<void> register(String email, String password, String username,
+      String name, String phonenumber) async {
     try {
       final UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -49,7 +50,10 @@ class AuthProvider with ChangeNotifier {
             'followingCount': 0,
             'password': password,
             'postsCount': 0,
-            'userId': ""
+            'userId': username,
+            'name': name,
+            'phoneNumber': phonenumber,
+            'bookmarks': [],
           });
         } else {
           // Document doesn't exist, create a new one
@@ -59,7 +63,10 @@ class AuthProvider with ChangeNotifier {
             'followingCount': 0,
             'password': password,
             'postsCount': 0,
-            'userId': ""
+            'userId': username,
+            'name': name,
+            'phoneNumber': phonenumber,
+            'bookmarks': [],
           });
           await FirebaseFirestore.instance
               .collection('users')
@@ -186,6 +193,8 @@ class AuthProvider with ChangeNotifier {
     _rememberMe = value;
     notifyListeners();
   }
+
+  bool get isLoggedIn => _currentUser != null;
 
   bool get isAuthenticated => _auth.currentUser != null;
 

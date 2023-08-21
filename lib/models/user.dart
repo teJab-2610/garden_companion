@@ -1,48 +1,69 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-
 class MyUser {
+  final String uid;
   final String username;
+  final String name;
   final String password;
   final String email;
   final String phoneNumber;
-  final int followingCount;
-  final int followersCount;
-  final int postsCount;
+  int followingCount;
+  int followersCount;
+  int postsCount;
+  List<String> bookmarks;
+  List<String> groups;
 
   MyUser({
+    required this.uid,
     required this.username,
+    required this.name,
     required this.password,
     required this.email,
     required this.phoneNumber,
     required this.followingCount,
     required this.followersCount,
     required this.postsCount,
+    required this.bookmarks,
+    required this.groups,
   });
 
-  factory MyUser.fromJson(Map<String, dynamic> json) {
+  factory MyUser.fromJson(Map<String, dynamic> json, String uid) {
+    // print(json['userId'] as String);
+    // print(json['password'] as String);
+    // print(json['followersCount'] as int);
+    // print(json['email'] as String);
+    // print(json['phoneNumber'] as String);
+    // print(json['followingCount'] as int);
+
+    // print('postsCount');
+    // print(json['postsCount'] as int);
+    //print(json['bookmarks'] as List<String>);
     return MyUser(
-      username: json['username'],
-      password: json['password'],
-      email: json['email'],
-      phoneNumber: json['phoneNumber'],
-      followingCount: json['followingCount'],
-      followersCount: json['followersCount'],
-      postsCount: json['postsCount'],
+      uid: uid,
+      username: json['userId'] as String,
+      name: json['name'] as String,
+      password: json['password'] as String,
+      email: json['email'] as String,
+      phoneNumber: json['phoneNumber'] as String,
+      followingCount: json['followingCount'] as int,
+      followersCount: json['followersCount'] as int,
+      postsCount: json['postsCount'] as int,
+      bookmarks: List<String>.from(json['bookmarks'] as List<dynamic>),
+      groups: List<String>.from(json['groups'] as List<dynamic>),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'uid': uid,
       'username': username,
+      'name': name,
       'password': password,
       'email': email,
       'phoneNumber': phoneNumber,
       'followingCount': followingCount,
       'followersCount': followersCount,
       'postsCount': postsCount,
+      'bookmarks': bookmarks,
+      'groups': groups,
     };
   }
 }

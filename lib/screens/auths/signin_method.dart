@@ -61,10 +61,10 @@ class _LoginRegState extends State<LoginReg> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => LoginPage()),
                   );
@@ -85,7 +85,7 @@ class _LoginRegState extends State<LoginReg> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -106,14 +106,14 @@ class _LoginRegState extends State<LoginReg> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               const Divider(
                 color: Color.fromARGB(255, 3, 36, 1),
                 thickness: 2,
                 indent: 50,
                 endIndent: 50,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               const Text(
                 'Or Login with',
                 style: TextStyle(
