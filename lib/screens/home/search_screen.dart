@@ -4,8 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../profile_screens/others_accout.dart'; // Make sure to import the correct file
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
-
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -49,7 +47,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search User'),
+        title: Text('Search User'),
       ),
       body: Column(
         children: [
@@ -60,13 +58,13 @@ class _SearchPageState extends State<SearchPage> {
                 Expanded(
                   child: TextField(
                     controller: _searchController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: 'User Email',
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.search),
+                  icon: Icon(Icons.search),
                   onPressed: _searchUser,
                 ),
               ],

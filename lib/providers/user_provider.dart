@@ -11,84 +11,75 @@ class UserProvider with ChangeNotifier {
   late FirebaseFirestore _firestore;
 
   MyUser _userProfile = MyUser(
+    uid: '',
     username: '',
     email: '',
     followersCount: 0,
+    name: '',
     followingCount: 0,
     postsCount: 0,
     password: '',
     phoneNumber: '',
+    bookmarks: [],
+    groups: [],
   );
   MyUser get userProfile => _userProfile;
-
+  User? get currentUser => _currentUser;
   UserProvider() {
+    print("inside user provider");
     _initPreferences();
   }
 
   Future<void> _initPreferences() async {
     _prefs = await SharedPreferences.getInstance();
 
-    final userId = _prefs.getString('email');
-    //print the userID
-    print('inside _initPreferences $userId');
-    if (userId == null) {
-      await fetchUserProfile(); // Fetch data from Firebase
+    final email = _prefs.getString('email');
+    print('inside _initPreferences ${email}');
+    if (email == null) {
+      await fetchUserProfile();
     } else {
       _loadUserProfile(); // Load cached data from shared preferences
     }
   }
 
   Future<void> _loadUserProfile() async {
-    final String userId = _prefs.getString('userId')!;
-    final String email = _prefs.getString('email')!;
-    final int followersCount = _prefs.getInt('followersCount')!;
-    final int followingCount = _prefs.getInt('followingCount')!;
-    final int postsCount = _prefs.getInt('postsCount')!;
+    print("inside _loadUserProfile");
     _userProfile = MyUser(
-      username: userId,
-      email: email,
-      followersCount: followersCount,
-      followingCount: followingCount,
-      postsCount: postsCount,
+      uid: _currentUser.uid,
+      username: _prefs.getString('userId') ?? '',
+      name: _prefs.getString('name') ?? '',
+      email: _prefs.getString('email') ?? '',
+      followersCount: _prefs.getInt('followersCount') ?? 0,
+      followingCount: _prefs.getInt('followingCount') ?? 0,
+      postsCount: _prefs.getInt('postsCount') ?? 0,
       password: '',
       phoneNumber: '',
+      bookmarks: _prefs.getStringList('bookmarks') ?? [],
+      groups: _prefs.getStringList('groups') ?? [],
     );
     notifyListeners();
   }
 
   Future<void> fetchUserProfile() async {
     try {
-      final User? currentUser = _auth.currentUser;
-      if (currentUser != null) {
-        _firestore = FirebaseFirestore.instance; // Initialize _firestore
+      final User currentUser = FirebaseAuth.instance.currentUser!;
+      final uid = currentUser.uid;
+      print(uid);
+      final userDoc =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      final userData = userDoc.data();
 
-        final DocumentSnapshot<Map<String, dynamic>> userDoc =
-            await _firestore.collection('users').doc(currentUser.uid).get();
-
-        final int followersCount = userDoc['followersCount'];
-        final int followingCount = userDoc['followingCount'];
-        final int postsCount = userDoc['postsCount'];
-
-        _userProfile = MyUser(
-          username: currentUser.uid,
-          email: currentUser.email!,
-          followersCount: followersCount,
-          followingCount: followingCount,
-          postsCount: postsCount,
-          password: '',
-          phoneNumber: '',
-        );
-
-        await _prefs.setString('userId', currentUser.uid);
-        await _prefs.setString('email', currentUser.email!);
-        await _prefs.setInt('followersCount', followersCount);
-        await _prefs.setInt('followingCount', followingCount);
-        await _prefs.setInt('postsCount', postsCount);
-
+      if (userData != null) {
+        print("1");
+        _userProfile = MyUser.fromJson(userData, uid);
+        print("2");
+        //await _saveUserDataToPreferences();
         notifyListeners();
+      } else {
+        throw Exception('User data not found in Firestore');
       }
-    } catch (e) {
-      print('Error fetching user profile: $e');
+    } catch (error) {
+      print('Error fetching user profile: $error');
     }
   }
 
@@ -98,6 +89,8 @@ class UserProvider with ChangeNotifier {
     String username,
   ) async {
     _userProfile = MyUser(
+      uid: _currentUser.uid,
+      name: '',
       username: userId,
       email: email,
       followersCount: 0,
@@ -105,6 +98,8 @@ class UserProvider with ChangeNotifier {
       postsCount: 0,
       password: '',
       phoneNumber: '',
+      bookmarks: [],
+      groups: [],
     );
 
     await _saveUserDataToPreferences();
@@ -114,13 +109,16 @@ class UserProvider with ChangeNotifier {
   Future<void> _saveUserDataToPreferences() async {
     await _prefs.setString('userId', _userProfile.username);
     await _prefs.setString('email', _userProfile.email);
+    await _prefs.setString('name', _userProfile.name);
     await _prefs.setInt('followersCount', _userProfile.followersCount);
     await _prefs.setInt('followingCount', _userProfile.followingCount);
     await _prefs.setInt('postsCount', _userProfile.postsCount);
+    await _prefs.setStringList('bookmarks', _userProfile.bookmarks);
+    await _prefs.setStringList('groups', _userProfile.groups);
   }
 
   Future<bool> isFollowingUser(String userId) async {
-    print('inside isFollowingUser $userId');
+    print('inside isFollowingUser ${userId}');
     try {
       DocumentSnapshot followingSnapshot = await FirebaseFirestore.instance
           .collection('users')
@@ -142,8 +140,10 @@ class UserProvider with ChangeNotifier {
           FirebaseFirestore.instance.collection('users').doc(userId);
 
       await userRef.update({
-        'followerCount': FieldValue.increment(increment ? 1 : -1),
+        'followersCount': FieldValue.increment(increment ? 1 : -1),
       });
+      //update preferences
+      await _prefs.setInt('followersCount', _userProfile.followersCount);
 
       print('Follower count updated successfully');
 
@@ -151,6 +151,29 @@ class UserProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print('Error updating follower count: $e');
+    }
+  }
+
+  //method to add a post to bookmarks list
+  Future<void> addPostToBookmarks(String postID) async {
+    try {
+      final userRef = _firestore.collection('users').doc(_currentUser.uid);
+      final userSnapshot = await userRef.get();
+      if (userSnapshot.exists) {
+        final bookmarks = List<String>.from(userSnapshot['bookmarks']);
+        if (!bookmarks.contains(postID)) {
+          bookmarks.add(postID);
+          await userRef.update({'bookmarks': bookmarks});
+
+          // Update locally and in shared preferences
+          _userProfile.bookmarks = bookmarks;
+          //save preferences
+          await _prefs.setStringList('bookmarks', bookmarks);
+          notifyListeners();
+        }
+      }
+    } catch (error) {
+      print('Error adding post to bookmarks: $error');
     }
   }
 
@@ -162,6 +185,8 @@ class UserProvider with ChangeNotifier {
       await userRef.update({
         'followingCount': FieldValue.increment(increment ? 1 : -1),
       });
+      //update followeing preferences
+      await _prefs.setInt('followingCount', _userProfile.followingCount);
       print('Follower count updated successfully');
       notifyListeners();
     } catch (e) {
@@ -170,7 +195,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> followUser(String otherID) async {
-    print('inside followUser $otherID');
+    print('inside followUser ${otherID}');
     try {
       User? currentUser = _auth.currentUser;
       await FirebaseFirestore.instance
@@ -194,7 +219,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> unFollowing(String otherID) async {
-    print('inside unFollowing $otherID');
+    print('inside unFollowing ${otherID}');
     try {
       User? currentUser = _auth.currentUser;
       await FirebaseFirestore.instance

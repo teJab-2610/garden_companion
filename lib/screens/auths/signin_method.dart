@@ -64,13 +64,14 @@ class _LoginRegState extends State<LoginReg> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    MaterialPageRoute(builder: (context) => LoginPage()),
                   );
                 },
+                child: const Text('LOGIN'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
+                  primary: Colors.transparent,
                   minimumSize: const Size(300, 50),
                   side: const BorderSide(
                     color: Colors.white,
@@ -83,19 +84,20 @@ class _LoginRegState extends State<LoginReg> {
                     color: Colors.white,
                   ),
                 ),
-                child: const Text('LOGIN'),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const RegisterPage()),
+                    MaterialPageRoute(builder: (context) => RegisterPage()),
                   );
                 },
+                child: const Text('REGISTER'),
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: const Color.fromARGB(255, 6, 93, 0), backgroundColor: Colors.white,
+                  primary: Colors.white,
                   minimumSize: const Size(300, 50),
+                  onPrimary: Color.fromARGB(255, 6, 93, 0),
                   elevation: 0,
                   textStyle: const TextStyle(
                     fontSize: 25,
@@ -103,7 +105,6 @@ class _LoginRegState extends State<LoginReg> {
                     color: Colors.black,
                   ),
                 ),
-                child: const Text('REGISTER'),
               ),
               const SizedBox(height: 20),
               const Divider(
@@ -127,7 +128,7 @@ class _LoginRegState extends State<LoginReg> {
                   _onGoogleSignInPressed(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
+                  primary: Colors.transparent,
                   minimumSize: const Size(300, 50),
                   elevation: 0,
                   textStyle: const TextStyle(
@@ -156,7 +157,7 @@ class _LoginRegState extends State<LoginReg> {
       await authProvider.loginWithGoogle();
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => HomePage()),
       );
     } catch (error) {
       _showErrorDialog(context, 'Google Sign-In failed: $error');

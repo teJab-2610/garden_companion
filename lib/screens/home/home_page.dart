@@ -1,15 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:garden_companion_2/screens/auths/login_screen.dart';
 import 'package:garden_companion_2/screens/home/search_screen.dart';
+import 'package:garden_companion_2/screens/home/splash_screen.dart';
+import 'package:garden_companion_2/screens/posts/create_post_screen.dart';
 import 'package:garden_companion_2/screens/profile_screens/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:camera/camera.dart';
-import 'camera_screen.dart';
+// import '../Groups/groups_list.dart';
+import '../posts/posts_screens.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -22,40 +21,51 @@ class _HomePageState extends State<HomePage> {
     await prefs.clear();
     await _auth.signOut();
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const LoginPage()));
+        context, MaterialPageRoute(builder: (context) => SplashScreen()));
 
     // Clear route history
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => const LoginPage()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => SplashScreen()),
+        (route) => false);
   }
 
   void _navigateToSearchPage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const SearchPage()),
+      MaterialPageRoute(builder: (context) => SearchPage()),
     );
   }
 
   void _navigateToProfilePage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ProfileScreen()),
+      MaterialPageRoute(builder: (context) => ProfileScreen()),
     );
   }
 
-  void _navigateToCameraPage(BuildContext context) async {
-    final cameras = await availableCameras();
-    final firstCamera = cameras.first;
+  void _navigateToPostsPage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => CameraScreen(camera: firstCamera)),
+      MaterialPageRoute(builder: (context) => PostsScreen()),
+    );
+  }
+
+  Future<bool> redirectto() async {
+    //exit app
+    return true;
+  }
+
+  void _navigateToCreatePostScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => NewPostScreen()),
     );
   }
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text('Home Page '),
+      title: const Text('Home Page'),
       actions: [
         IconButton(
           icon: const Icon(Icons.logout),
@@ -65,12 +75,20 @@ class _HomePageState extends State<HomePage> {
           icon: const Icon(Icons.search),
           onPressed: () => _navigateToSearchPage(context),
         ),
+        IconButton(
+          icon: const Icon(Icons.plus_one),
+          onPressed: () => _navigateToCreatePostScreen(context),
+        ),
       ],
     );
   }
 
   BottomNavigationBar _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
+      //make it blue
+      selectedItemColor: const Color.fromARGB(255, 249, 13, 13),
+      //make the bar color blue
+      backgroundColor: Color.fromARGB(255, 88, 249, 13),
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -84,12 +102,24 @@ class _HomePageState extends State<HomePage> {
           icon: Icon(Icons.person),
           label: 'Profile',
         ),
+        BottomNavigationBarItem(icon: Icon(Icons.list), label: 'List'),
+        BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add'),
       ],
       onTap: (index) {
         if (index == 1) {
-          _navigateToCameraPage(context);
-        } else if (index == 2) {
           _navigateToProfilePage(context);
+        }
+        if (index == 2) {
+          // _navigateToProfilePage(context);
+        }
+        if (index == 3) {
+          _navigateToPostsPage(context);
+        }
+        if (index == 4) {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => GroupChats()),
+          // );
         }
       },
     );
@@ -99,9 +129,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: const Center(
-        //say hello with the email id
-        child: Text('Hello World'),
+      body: WillPopScope(
+        onWillPop: redirectto,
+        child: const Center(
+          child: Text('Hello World'),
+        ),
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context),
     );

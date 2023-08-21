@@ -1,34 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../providers/user_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Profile')),
+      //show the current profile information
       body: Consumer<UserProvider>(
         builder: (context, userProvider, child) {
-          final userProfile = userProvider.userProfile;
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+          if (userProvider.currentUser != null) {
+            return Column(
               children: [
-                Text('User ID: ${userProfile.email}'),
-                Text('Followers: ${userProfile.followersCount}'),
-                Text('Following: ${userProfile.followingCount}'),
-                // Other profile information
+                Text('Username: ${userProvider.userProfile.username}'),
+                Text('Email: ${userProvider.userProfile.email}'),
+                Text('Followers: ${userProvider.userProfile.followersCount}'),
+                Text('Following: ${userProvider.userProfile.followingCount}'),
+                Text('Posts: ${userProvider.userProfile.postsCount}'),
+                //refresh profile button
                 ElevatedButton(
-                  onPressed: () async {
-                    await userProvider.fetchUserProfile();
+                  onPressed: () {
+                    userProvider.fetchUserProfile(); // Refresh the profile
                   },
                   child: const Text('Refresh Profile'),
                 ),
               ],
-            ),
-          );
+            );
+          } else {
+            return Text('Not logged in');
+          }
         },
       ),
     );
