@@ -3,12 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:garden_companion_2/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../models/offers.dart';
 
 class UserProvider with ChangeNotifier {
   final User _currentUser = FirebaseAuth.instance.currentUser!;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late SharedPreferences _prefs;
-  late FirebaseFirestore _firestore;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   MyUser _userProfile = MyUser(
     uid: '',
@@ -132,6 +133,41 @@ class UserProvider with ChangeNotifier {
       print('Error checking if user is following: $e');
       return false;
     }
+  }
+
+  Future<List<String>> getCommonFollowers(String userUid) async {
+    List<String> commonFollowers = [];
+
+    try {
+      // Get the user's followers
+      QuerySnapshot followersSnapshot = await _firestore
+          .collection('users')
+          .doc(userUid)
+          .collection('followers')
+          .get();
+      List<String> followers =
+          followersSnapshot.docs.map((doc) => doc.id).toList();
+
+      QuerySnapshot followingSnapshot = await _firestore
+          .collection('users')
+          .doc(userUid)
+          .collection('following')
+          .get();
+      List<String> following =
+          followingSnapshot.docs.map((doc) => doc.id).toList();
+
+      // Find the common followers
+      for (String followerUid in followers) {
+        if (following.contains(followerUid)) {
+          commonFollowers.add(followerUid);
+        }
+      }
+      notifyListeners();
+    } catch (error) {
+      print("Error in getting common followers: $error");
+    }
+
+    return commonFollowers;
   }
 
   Future<void> updateFollowerCount(String userId, bool increment) async {

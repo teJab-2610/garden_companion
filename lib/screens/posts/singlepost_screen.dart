@@ -51,7 +51,9 @@ class _BlogContentPageState extends State<BlogContentPage> {
                   itemCount: widget.blogItem.images.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Image.network(
-                      widget.blogItem.images[index],
+                      widget.blogItem.images.isNotEmpty
+                          ? widget.blogItem.images[0]
+                          : "https://firebasestorage.googleapis.com/v0/b/gardencompanion2.appspot.com/o/images%2Fdummy-post-horisontal-thegem-blog-default.jpg?alt=media&token=34f778d3-d19f-4cb9-9fb4-ec7398c4983a",
                       fit: BoxFit.cover,
                     );
                   },
@@ -97,51 +99,60 @@ class _BlogContentPageState extends State<BlogContentPage> {
               ),
               SizedBox(height: 8.0),
               Text(
-                "By ${widget.blogItem.postId}",
+                "By ${widget.blogItem.username}",
                 style: const TextStyle(
                   color: Colors.grey,
-                ),
-              ),
-              SizedBox(height: 16.0),
-              Text(
-                widget.blogItem.text,
-                style: const TextStyle(
-                  fontSize: 16.0,
                 ),
               ),
               SizedBox(height: 16.0),
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      PostProvider()
+                    onPressed: () async {
+                      await PostProvider()
                           .likePost(widget.blogItem.postId, currentUser);
+                      setState(() {});
                     },
                     icon: Icon(
                       Icons.thumb_up,
                       color: iconColor,
                     ),
                   ),
+                  FutureBuilder<int>(
+                    future:
+                        PostProvider().getLikesCount(widget.blogItem.postId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return const Text('Error loading likes');
+                      } else {
+                        final likesCount = snapshot.data ?? 0;
+                        return Text('$likesCount likes');
+                      }
+                    },
+                  ),
                   IconButton(
-                    onPressed: () {
-                      PostProvider()
+                    onPressed: () async {
+                      await PostProvider()
                           .removeLike(widget.blogItem.postId, currentUser);
+                      setState(() {});
                     },
                     icon: Icon(
                       Icons.thumb_down,
                       color: iconColor,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      // PostProvider.addComment(
-                      //     widget.blogItem.postId, );
-                    },
-                    icon: Icon(
-                      Icons.comment,
-                      color: iconColor,
-                    ),
-                  ),
+                  // IconButton(
+                  //   onPressed: () {
+                  // PostProvider.addComment(
+                  //     widget.blogItem.postId, );
+                  //   },
+                  //   icon: Icon(
+                  //     Icons.comment,
+                  //     color: iconColor,
+                  //   ),
+                  // ),
                   IconButton(
                     onPressed: () {
                       PostProvider()
@@ -154,6 +165,13 @@ class _BlogContentPageState extends State<BlogContentPage> {
                   ),
                 ],
               ),
+              Text(
+                widget.blogItem.text,
+                style: const TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              SizedBox(height: 16.0),
             ],
           ),
         ),

@@ -4,29 +4,61 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:garden_companion_2/models/post.dart';
 import 'package:garden_companion_2/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../models/offers.dart';
 import '../../providers/post_provider.dart';
 import '../../providers/user_provider.dart';
 import 'dart:io';
 
-class NewPostScreen extends StatefulWidget {
+class NewOfferScreen extends StatefulWidget {
   @override
   _NewPostScreenState createState() => _NewPostScreenState();
 }
 
-class _NewPostScreenState extends State<NewPostScreen> {
+class _NewPostScreenState extends State<NewOfferScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   TextEditingController _titleController = TextEditingController();
   TextEditingController _textController = TextEditingController();
   List<File> selectedImages = [];
-  List<String> imageURLs = [];
+  String imageURLs = "";
   bool _isUploading = false;
   bool _uploadError = false;
 
   void _navigateBack() {
     Navigator.pop(context);
+  }
+
+  Future<void> addOffer(Offer newPost, MyUser currentUser) async {
+    try {
+      print('step one done');
+      // Add the new post to Firestore
+      final postDocRef = await _firestore
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection('items')
+          .add(newPost.toJson());
+      print('step two done');
+      print('currentuser : ${currentUser.uid}');
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .collection('items')
+          .doc(postDocRef.id)
+          .set({
+        'itemId': postDocRef.id,
+        'imageUrl': imageURLs,
+        'timestamp': Timestamp.now(),
+        'originaluid': currentUser.uid,
+        'author': currentUser.name,
+        'title': _titleController.text
+      }, SetOptions(merge: true));
+      print('step four done');
+    } catch (error) {
+      print('Error adding post: $error');
+    }
   }
 
   void _createNewPost() async {
@@ -38,48 +70,31 @@ class _NewPostScreenState extends State<NewPostScreen> {
       );
       return;
     }
-    if (_textController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter some text'),
-        ),
-      );
-      return;
-    }
-    print('step one done');
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    print('currentUser uid: ${uid}');
+
     final current =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     final currentUser =
         MyUser.fromJson(current.data() as Map<String, dynamic>, uid);
     final newPost = _buildNewPost(currentUser);
-    print('step three done');
     // Add the post to Firebase and user's posts subcollection
-    await addPostToFirebase(newPost);
-    print('step four done');
+    await addOfferToFirebase(newPost, currentUser);
     _navigateBack();
   }
 
-  Post _buildNewPost(MyUser currentUser) {
-    return Post(
-      uid: currentUser.uid,
+  Offer _buildNewPost(MyUser currentUser) {
+    return Offer(
+      originaluid: currentUser.uid,
       title: _titleController.text,
-      text: _textController.text,
-      username: currentUser.name,
-      images: imageURLs,
-      userId: currentUser.username,
-      comments: [], // Initialize comments as an empty list
-      commentsCount: 0, // Initialize commentsCount
-      likes: [],
-      likesCount: 0,
-      postId: '',
-      timestamp: Timestamp.now(), // Initialize timestamp
+      author: currentUser.name,
+      imageUrl: imageURLs,
+      timestamp: Timestamp.now(),
+      itemId: '',
     );
   }
 
-  Future<void> addPostToFirebase(Post newPost) async {
-    await Provider.of<PostProvider>(context, listen: false).addPost(newPost);
+  Future<void> addOfferToFirebase(Offer newPost, MyUser currentUser) async {
+    await addOffer(newPost, currentUser);
   }
 
   Widget _buildImageGridView() {
@@ -121,20 +136,21 @@ class _NewPostScreenState extends State<NewPostScreen> {
   Future<void> _uploadImages() async {
     try {
       final storage = FirebaseStorage.instance;
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final current =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
       final currentUser =
-          Provider.of<UserProvider>(context, listen: false).userProfile;
-      for (int i = 0; i < selectedImages.length; i++) {
-        final imageFile = selectedImages[i];
-        final uniqueFileName =
-            '${currentUser.uid}-image_${DateTime.now().millisecondsSinceEpoch}_$i.jpg';
-        final storageReference = storage.ref().child('images/$uniqueFileName');
-        final uploadTask = storageReference.putFile(imageFile);
+          MyUser.fromJson(current.data() as Map<String, dynamic>, uid);
+      final imageFile = selectedImages[0];
+      final uniqueFileName =
+          '${currentUser.uid}-image_${DateTime.now().millisecondsSinceEpoch}_.jpg';
+      final storageReference = storage.ref().child('images/$uniqueFileName');
+      final uploadTask = storageReference.putFile(imageFile);
 
-        await uploadTask.whenComplete(() async {
-          final downloadURL = await storageReference.getDownloadURL();
-          imageURLs.add(downloadURL);
-        });
-      }
+      await uploadTask.whenComplete(() async {
+        final downloadURL = await storageReference.getDownloadURL();
+        imageURLs = (downloadURL);
+      });
 
       // Do something with the imageURLs array (e.g., save it to a database)
       print("Image URLs: $imageURLs");
@@ -270,38 +286,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color:
-                      const Color.fromARGB(255, 118, 154, 76).withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Description',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Sf'),
-                    ),
-                    TextField(
-                      controller: _textController,
-                      maxLines: 11, // Increased the number of lines
-                      decoration: const InputDecoration(
-                        hintText: 'Enter post description...',
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                          fontFamily:
-                              'Sf', // Replace 'YourCustomFont' with the actual font family name
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
               const SizedBox(height: 16),
               Container(
                 height: 60,

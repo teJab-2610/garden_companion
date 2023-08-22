@@ -39,7 +39,7 @@ class BlogTile extends StatelessWidget {
               //take first image
               blogItem.images.isNotEmpty
                   ? blogItem.images[0]
-                  : "https://firebasestorage.googleapis.com/v0/b/gardencompanion2.appspot.com/o/images%2Fimage_0.jpg?alt=media&token=87d83988-3b4e-4297-9df0-b9475796b864",
+                  : "https://firebasestorage.googleapis.com/v0/b/gardencompanion2.appspot.com/o/images%2Fdummy-post-horisontal-thegem-blog-default.jpg?alt=media&token=34f778d3-d19f-4cb9-9fb4-ec7398c4983a",
               height: 150, // Adjust the height as needed
               width: double.infinity,
               fit: BoxFit.cover,
@@ -88,15 +88,15 @@ class BlogTile extends StatelessWidget {
                             color: iconColor,
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            // Handle comment button press
-                          },
-                          icon: Icon(
-                            Icons.comment,
-                            color: iconColor,
-                          ),
-                        ),
+                        // IconButton(
+                        //   onPressed: () {
+                        //     // Handle comment button press
+                        //   },
+                        //   icon: Icon(
+                        //     Icons.comment,
+                        //     color: iconColor,
+                        //   ),
+                        // ),
                         IconButton(
                           onPressed: () {
                             PostProvider()
