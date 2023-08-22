@@ -86,6 +86,18 @@ class AuthProvider with ChangeNotifier {
               .collection('posts')
               .doc('dummy')
               .set({});
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('items')
+              .doc('dummy')
+              .set({});
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('notifications')
+              .doc('dummy')
+              .set({});
         }
 
         // Notify listeners about successful registration
@@ -129,6 +141,12 @@ class AuthProvider with ChangeNotifier {
           .collection('users')
           .doc(userId)
           .collection('posts')
+          .doc('dummy')
+          .set({});
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('items')
           .doc('dummy')
           .set({});
 
