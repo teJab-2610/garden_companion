@@ -48,8 +48,10 @@ class _PerenualApiScreenState extends State<PerenualApiScreen> {
 
       if (response.statusCode == 200) {
         final result = json.decode(response.body);
+        print("here");
         print(result);
         final data = result['data'];
+        print("here too");
         if (data.isNotEmpty) {
           print(data);
           final firstPlant = data[0];

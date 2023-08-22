@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:garden_companion_2/screens/home/search_screen.dart';
 import 'package:garden_companion_2/screens/home/splash_screen.dart';
+import 'package:garden_companion_2/screens/plant_searcher/plant_search.dart';
 import 'package:garden_companion_2/screens/posts/create_post_screen.dart';
 import 'package:garden_companion_2/screens/profile_screens/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -98,31 +99,34 @@ class _HomePageState extends State<HomePage> {
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.camera_enhance),
-          label: 'Camera',
+          icon: Icon(Icons.search),
+          label: 'search',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
+          icon: Icon(Icons.camera_alt_outlined),
+          label: 'Camera',
         ),
         BottomNavigationBarItem(icon: Icon(Icons.list), label: 'List'),
-        BottomNavigationBarItem(icon: Icon(Icons.camera_enhance), label: 'Camera'),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'profile'),
       ],
       onTap: (index) {
         if (index == 1) {
-          _navigateToProfilePage(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PlantSearchScreen()),
+          );
         }
         if (index == 2) {
-          // _navigateToProfilePage(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CameraScreen()),
+          );
         }
         if (index == 3) {
           _navigateToPostsPage(context);
         }
         if (index == 4) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CameraScreen()),
-          );
+          
         }
       },
     );
