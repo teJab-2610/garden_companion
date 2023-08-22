@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageUploadScreen extends StatefulWidget {
+  const ImageUploadScreen({super.key});
+
   @override
   _ImageUploadScreenState createState() => _ImageUploadScreenState();
 }
@@ -16,12 +17,10 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
   Future<void> _pickImages() async {
     final picker = ImagePicker();
     final pickedFiles = await picker.pickMultiImage();
-    if (pickedFiles != null) {
-      setState(() {
-        selectedImages.addAll(pickedFiles.map((file) => File(file.path)));
-      });
+    setState(() {
+      selectedImages.addAll(pickedFiles.map((file) => File(file.path)));
+    });
     }
-  }
 
   void _removeImage(int index) {
     setState(() {

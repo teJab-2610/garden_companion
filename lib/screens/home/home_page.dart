@@ -7,8 +7,11 @@ import 'package:garden_companion_2/screens/profile_screens/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import '../Groups/groups_list.dart';
 import '../posts/posts_screens.dart';
+import '../plant_id/camera_screen.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -21,33 +24,33 @@ class _HomePageState extends State<HomePage> {
     await prefs.clear();
     await _auth.signOut();
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => SplashScreen()));
+        context, MaterialPageRoute(builder: (context) => const SplashScreen()));
 
     // Clear route history
     Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => SplashScreen()),
+        MaterialPageRoute(builder: (context) => const SplashScreen()),
         (route) => false);
   }
 
   void _navigateToSearchPage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SearchPage()),
+      MaterialPageRoute(builder: (context) => const SearchPage()),
     );
   }
 
   void _navigateToProfilePage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ProfileScreen()),
+      MaterialPageRoute(builder: (context) => const ProfileScreen()),
     );
   }
 
   void _navigateToPostsPage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PostsScreen()),
+      MaterialPageRoute(builder: (context) => const PostsScreen()),
     );
   }
 
@@ -59,7 +62,7 @@ class _HomePageState extends State<HomePage> {
   void _navigateToCreatePostScreen(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => NewPostScreen()),
+      MaterialPageRoute(builder: (context) => const NewPostScreen()),
     );
   }
 
@@ -86,9 +89,9 @@ class _HomePageState extends State<HomePage> {
   BottomNavigationBar _buildBottomNavigationBar(BuildContext context) {
     return BottomNavigationBar(
       //make it blue
-      selectedItemColor: const Color.fromARGB(255, 249, 13, 13),
+      selectedItemColor: const Color.fromARGB(255, 43, 114, 7),
+      unselectedItemColor: Colors.grey,
       //make the bar color blue
-      backgroundColor: Color.fromARGB(255, 88, 249, 13),
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -103,7 +106,7 @@ class _HomePageState extends State<HomePage> {
           label: 'Profile',
         ),
         BottomNavigationBarItem(icon: Icon(Icons.list), label: 'List'),
-        BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add'),
+        BottomNavigationBarItem(icon: Icon(Icons.camera_enhance), label: 'Camera'),
       ],
       onTap: (index) {
         if (index == 1) {
@@ -116,10 +119,10 @@ class _HomePageState extends State<HomePage> {
           _navigateToPostsPage(context);
         }
         if (index == 4) {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => GroupChats()),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CameraScreen()),
+          );
         }
       },
     );
