@@ -22,7 +22,6 @@ class BlogTile extends StatelessWidget {
     printer();
     return InkWell(
       onTap: () {
-        // Navigate to the BlogContentPage when the tile is clicked
         Navigator.push(
           context,
           MaterialPageRoute(

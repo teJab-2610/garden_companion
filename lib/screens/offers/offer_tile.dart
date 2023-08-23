@@ -20,7 +20,9 @@ class BlogTile extends StatelessWidget {
             borderRadius:
                 const BorderRadius.vertical(top: Radius.circular(8.0)),
             child: Image.network(
-              blogItem.imageUrl,
+              blogItem.imageUrl.isNotEmpty
+                  ? blogItem.imageUrl
+                  : "https://firebasestorage.googleapis.com/v0/b/gardencompanion2.appspot.com/o/images%2Fdummy-post-horisontal-thegem-blog-default.jpg?alt=media&token=34f778d3-d19f-4cb9-9fb4-ec7398c4983a",
               height: 120,
               width: double.infinity,
               fit: BoxFit.cover,

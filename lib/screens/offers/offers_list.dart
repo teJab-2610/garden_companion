@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:garden_companion_2/screens/offers/create_offer.dart';
 import 'package:garden_companion_2/screens/offers/offers_notificaction.dart';
+import 'package:garden_companion_2/screens/offers/single_offer.dart';
 import 'package:provider/provider.dart';
 import '../../models/offers.dart';
 import '../../providers/user_provider.dart';
@@ -271,13 +272,13 @@ class _OffersListState extends State<OffersList> {
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) =>
-                        //         BlogDetailScreen(blogItem: blogItems[index]),
-                        //   ),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                PresentOffer(offer: blogItems[index]),
+                          ),
+                        );
                       },
                       child: BlogTile(blogItem: blogItems[index]),
                     );

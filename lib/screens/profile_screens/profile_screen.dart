@@ -1,36 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../providers/user_provider.dart';
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
 
-class ProfileScreen extends StatelessWidget {
+class _ProfilePageState extends State<ProfileScreen> {
+  User? _user;
+  late Stream<DocumentSnapshot> _userStream;
+
+  @override
+  void initState() {
+    super.initState();
+    _user = FirebaseAuth.instance.currentUser;
+    _userStream = FirebaseFirestore.instance
+        .collection('users')
+        .doc(_user!.uid)
+        .snapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
-      //show the current profile information
-      body: Consumer<UserProvider>(
-        builder: (context, userProvider, child) {
-          if (userProvider.currentUser != null) {
-            return Column(
-              children: [
-                Text('Username: ${userProvider.userProfile.username}'),
-                Text('Email: ${userProvider.userProfile.email}'),
-                Text('Followers: ${userProvider.userProfile.followersCount}'),
-                Text('Following: ${userProvider.userProfile.followingCount}'),
-                Text('Posts: ${userProvider.userProfile.postsCount}'),
-                //refresh profile button
-                ElevatedButton(
-                  onPressed: () {
-                    userProvider.fetchUserProfile(); // Refresh the profile
-                  },
-                  child: const Text('Refresh Profile'),
-                ),
-              ],
+      appBar: AppBar(
+        title: Text('Profile Page'),
+      ),
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: _userStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
             );
-          } else {
-            return Text('Not logged in');
           }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          }
+
+          if (!snapshot.hasData || !snapshot.data!.exists) {
+            return Center(
+              child: Text('User data not found.'),
+            );
+          }
+
+          final userData = snapshot.data!.data() as Map<String, dynamic>;
+
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('Name: ${userData['name']}'),
+                Text('Email: ${_user!.email}'),
+                Text('Age: ${userData['age']}'),
+              ],
+            ),
+          );
         },
       ),
     );

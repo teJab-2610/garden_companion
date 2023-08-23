@@ -141,7 +141,7 @@ class _OffersListState extends State<OffersListSelf> {
                     color: Color(0xFF5B8E55),
                   ),
                   const Text(
-                    'Offers ',
+                    'My Offers ',
                     style: TextStyle(
                       color: Color(0xFF5B8E55),
                       fontSize: 40,
@@ -150,13 +150,6 @@ class _OffersListState extends State<OffersListSelf> {
                   ),
                   Row(
                     children: [
-                      // IconButton(
-                      //   icon: Icon(Icons.list),
-                      //   onPressed: () {
-                      //     _navigateToSelfOffers(context);
-                      //   },
-                      //   color: Color(0xFF5B8E55),
-                      // ),
                       IconButton(
                         icon: Icon(Icons.notifications),
                         onPressed: () {
@@ -167,7 +160,6 @@ class _OffersListState extends State<OffersListSelf> {
                       IconButton(
                         icon: Icon(Icons.refresh),
                         onPressed: () {
-                          print("On refresh");
                           commonFollowers = _loadCommonFollowers();
                           allOffers = _getItemsForAllUsers();
                         },
@@ -281,6 +273,7 @@ class _OffersListState extends State<OffersListSelf> {
                         // );
                       },
                       child: BlogTile(blogItem: blogItems[index]),
+                      //add a cross button at the top corner of Blogtile
                     );
                   },
                 ),
