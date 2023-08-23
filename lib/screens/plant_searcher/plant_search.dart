@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'details_fetcher.dart';
 import 'display_details.dart';
 
-
 class Plant {
   final int id;
   final String searchText;
@@ -40,7 +39,9 @@ class PlantSearchScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PlantListScreen(searchText: searchText, ),
+                builder: (context) => PlantListScreen(
+                  searchText: searchText,
+                ),
               ),
             );
           }),
@@ -107,8 +108,7 @@ class _PlantListScreenState extends State<PlantListScreen> {
   }
 
   void _fetchPlants(String searchText) async {
-    final apiKey =
-        'sk-MWmz64de0acb084cd1886'; 
+    final apiKey = 'sk-MWmz64de0acb084cd1886';
     final apiUrl =
         'https://perenual.com/api/species-list?key=$apiKey&q=$searchText';
 
@@ -119,7 +119,7 @@ class _PlantListScreenState extends State<PlantListScreen> {
         var result = json.decode(response.body);
         ////print("here");
         List<Plant> plants =
-            parsePlantsFromJson(result,searchText); // Use the parsing function
+            parsePlantsFromJson(result, searchText); // Use the parsing function
         ////print("here2");
         //print(plants.length);
         setState(() {
@@ -142,25 +142,71 @@ class _PlantListScreenState extends State<PlantListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Plant List'),
+        backgroundColor:
+            Colors.green, // Change this color to match your plant theme
       ),
       body: ListView.builder(
-        itemCount: _plants.length,
+        itemCount: _plants.isEmpty ? 1 : _plants.length + 1,
         itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      PlantDetailScreen(plant: _plants[index]),
+          if (_plants.isEmpty) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (index < _plants.length) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PlantDetailScreen(plant: _plants[index]),
+                  ),
+                );
+              },
+              child: Container(
+                margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
                 ),
-              );
-            },
-            child: ListTile(
-              title: Text(_plants[index].name),
-              leading: Image.network(_plants[index].imageUrl),
-            ),
-          );
+                child: ListTile(
+                  title: Text(
+                    _plants[index].name,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  leading: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(_plants[index].imageUrl),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'End of List',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+            );
+          }
         },
       ),
     );
@@ -251,7 +297,8 @@ class PlantDetailScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => disease_Screen(diseaseDetailsList: details),
+                    builder: (context) =>
+                        disease_Screen(diseaseDetailsList: details),
                   ),
                 );
               },
