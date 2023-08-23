@@ -11,6 +11,8 @@ import '../offers/offer_tile.dart';
 import 'offer_list_self.dart';
 
 class OffersList extends StatefulWidget {
+  const OffersList({super.key});
+
   @override
   _OffersListState createState() => _OffersListState();
 }
@@ -60,21 +62,21 @@ class _OffersListState extends State<OffersList> {
   void _navigateToNotifications(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Notifications()),
+      MaterialPageRoute(builder: (context) => const Notifications()),
     );
   }
 
   void _navigateToCreateOffer(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => NewOfferScreen()),
+      MaterialPageRoute(builder: (context) => const NewOfferScreen()),
     );
   }
 
   void _navigateToSelfOffers(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => OffersListSelf()),
+      MaterialPageRoute(builder: (context) => const OffersListSelf()),
     );
   }
 
@@ -138,7 +140,7 @@ class _OffersListState extends State<OffersList> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    color: Color(0xFF5B8E55),
+                    color: const Color(0xFF5B8E55),
                   ),
                   const Text(
                     'Offers ',
@@ -151,34 +153,34 @@ class _OffersListState extends State<OffersList> {
                   Row(
                     children: [
                       IconButton(
-                        icon: Icon(Icons.list),
+                        icon: const Icon(Icons.list),
                         onPressed: () {
                           _navigateToSelfOffers(context);
                         },
-                        color: Color(0xFF5B8E55),
+                        color: const Color(0xFF5B8E55),
                       ),
                       IconButton(
-                        icon: Icon(Icons.notifications),
+                        icon: const Icon(Icons.notifications),
                         onPressed: () {
                           _navigateToNotifications(context);
                         },
-                        color: Color(0xFF5B8E55),
+                        color: const Color(0xFF5B8E55),
                       ),
                       IconButton(
-                        icon: Icon(Icons.refresh),
+                        icon: const Icon(Icons.refresh),
                         onPressed: () {
                           print("On refresh");
                           commonFollowers = _loadCommonFollowers();
                           allOffers = _getItemsForAllUsers();
                         },
-                        color: Color(0xFF5B8E55),
+                        color: const Color(0xFF5B8E55),
                       ),
                       IconButton(
-                        icon: Icon(Icons.add),
+                        icon: const Icon(Icons.add),
                         onPressed: () {
                           _navigateToCreateOffer(context);
                         },
-                        color: Color(0xFF5B8E55),
+                        color: const Color(0xFF5B8E55),
                       ),
                     ],
                   ),
@@ -204,16 +206,16 @@ class _OffersListState extends State<OffersList> {
         body: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
+              padding: const EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    color: Color(0xFF5B8E55),
+                    color: const Color(0xFF5B8E55),
                   ),
                   const Text(
                     'Offers ',
@@ -226,33 +228,33 @@ class _OffersListState extends State<OffersList> {
                   Row(
                     children: [
                       IconButton(
-                        icon: Icon(Icons.list),
+                        icon: const Icon(Icons.list),
                         onPressed: () {
                           _navigateToSelfOffers(context);
                         },
-                        color: Color(0xFF5B8E55),
+                        color: const Color(0xFF5B8E55),
                       ),
                       IconButton(
-                        icon: Icon(Icons.notifications),
+                        icon: const Icon(Icons.notifications),
                         onPressed: () {
                           _navigateToNotifications(context);
                         },
-                        color: Color(0xFF5B8E55),
+                        color: const Color(0xFF5B8E55),
                       ),
                       IconButton(
-                        icon: Icon(Icons.refresh),
+                        icon: const Icon(Icons.refresh),
                         onPressed: () {
                           commonFollowers = _loadCommonFollowers();
                           allOffers = _getItemsForAllUsers();
                         },
-                        color: Color(0xFF5B8E55),
+                        color: const Color(0xFF5B8E55),
                       ),
                       IconButton(
-                        icon: Icon(Icons.add),
+                        icon: const Icon(Icons.add),
                         onPressed: () {
                           _navigateToCreateOffer(context);
                         },
-                        color: Color(0xFF5B8E55),
+                        color: const Color(0xFF5B8E55),
                       ),
                     ],
                   ),

@@ -63,9 +63,11 @@ class _ProfilePageState extends State<ProfileScreen> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
         extendBodyBehindAppBar: true,
         backgroundColor: NowUIColors.bgColorScreen,
         drawer: NowDrawer(currentPage: "Profile"),
@@ -87,7 +89,6 @@ class _ProfilePageState extends State<ProfileScreen> {
                   child: Text('User data not found.'),
                 );
               }
-
               final userData = snapshot.data!.data() as Map<String, dynamic>;
 
               return Stack(

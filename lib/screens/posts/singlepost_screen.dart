@@ -8,7 +8,7 @@ import '../../providers/user_provider.dart';
 class BlogContentPage extends StatefulWidget {
   final Post blogItem;
 
-  BlogContentPage({required this.blogItem});
+  const BlogContentPage({super.key, required this.blogItem});
 
   @override
   _BlogContentPageState createState() => _BlogContentPageState();
@@ -33,7 +33,7 @@ class _BlogContentPageState extends State<BlogContentPage> {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = Color(0xFF5B8E55); // ARGB(255, 91, 142, 85)
+    const iconColor = Color(0xFF5B8E55); // ARGB(255, 91, 142, 85)
     final currentUser =
         Provider.of<UserProvider>(context, listen: false).userProfile;
     return Scaffold(
@@ -41,6 +41,7 @@ class _BlogContentPageState extends State<BlogContentPage> {
         child: Container(
           margin: EdgeInsets.only(top: 40.0), // Adjust the top margin as needed
           padding: EdgeInsets.all(16.0),
+
 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,21 +70,22 @@ class _BlogContentPageState extends State<BlogContentPage> {
                   },
                 ),
               ),
+
               SizedBox(height: 16.0),
-// Right and Left Navigation Buttons
-              Row(
+
+          Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
                     onPressed: () {
                       if (_pageController.page != 0) {
                         _pageController.previousPage(
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                         );
                       }
                     },
-                    icon: Icon(Icons.arrow_back),
+                    icon: const Icon(Icons.arrow_back),
                   ),
                   IconButton(
                     onPressed: () {
@@ -93,12 +95,12 @@ class _BlogContentPageState extends State<BlogContentPage> {
                                   : 1) -
                               1) {
                         _pageController.nextPage(
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                         );
                       }
                     },
-                    icon: Icon(Icons.arrow_forward),
+                    icon: const Icon(Icons.arrow_forward),
                   ),
                 ],
               ),
@@ -111,14 +113,14 @@ class _BlogContentPageState extends State<BlogContentPage> {
                   fontSize: 24.0,
                 ),
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               Text(
                 "By ${widget.blogItem.username}",
                 style: const TextStyle(
                   color: Colors.grey,
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Row(
                 children: [
                   IconButton(
@@ -127,7 +129,7 @@ class _BlogContentPageState extends State<BlogContentPage> {
                           .likePost(widget.blogItem.postId, currentUser);
                       setState(() {});
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.thumb_up,
                       color: iconColor,
                     ),
@@ -152,7 +154,7 @@ class _BlogContentPageState extends State<BlogContentPage> {
                           .removeLike(widget.blogItem.postId, currentUser);
                       setState(() {});
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.thumb_down,
                       color: iconColor,
                     ),
@@ -161,7 +163,7 @@ class _BlogContentPageState extends State<BlogContentPage> {
                     onPressed: () {
                       PostProvider().savePost(widget.blogItem.postId);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.bookmark,
                       color: iconColor,
                     ),
@@ -174,7 +176,7 @@ class _BlogContentPageState extends State<BlogContentPage> {
                   fontSize: 16.0,
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
             ],
           ),
         ),

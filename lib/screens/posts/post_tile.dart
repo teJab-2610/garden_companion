@@ -8,7 +8,7 @@ import '../../providers/user_provider.dart';
 class BlogTile extends StatelessWidget {
   final Post blogItem;
 
-  BlogTile({required this.blogItem});
+  const BlogTile({super.key, required this.blogItem});
 
   void printer() {
     if (blogItem.images.isNotEmpty) print(blogItem.images[0]);
@@ -18,7 +18,7 @@ class BlogTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentUser =
         Provider.of<UserProvider>(context, listen: false).userProfile;
-    final iconColor = Color(0xFF5B8E55); // ARGB(255, 91, 142, 85)
+    const iconColor = Color(0xFF5B8E55); // ARGB(255, 91, 142, 85)
     printer();
     return InkWell(
       onTap: () {
@@ -33,7 +33,7 @@ class BlogTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
             child: Image.network(
               //take first image
               blogItem.images.isNotEmpty
@@ -72,7 +72,7 @@ class BlogTile extends StatelessWidget {
                             PostProvider()
                                 .likePost(blogItem.postId, currentUser);
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.thumb_up,
                             color: iconColor,
                           ),
@@ -82,7 +82,7 @@ class BlogTile extends StatelessWidget {
                             PostProvider()
                                 .removeLike(blogItem.postId, currentUser);
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.thumb_down,
                             color: iconColor,
                           ),
@@ -91,7 +91,7 @@ class BlogTile extends StatelessWidget {
                           onPressed: () {
                             PostProvider().savePost(blogItem.postId);
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.bookmark,
                             color: iconColor,
                           ),
@@ -100,7 +100,7 @@ class BlogTile extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 4.0),
+                const SizedBox(height: 4.0),
                 Text(
                   "By ${blogItem.username}",
                   style: const TextStyle(color: Colors.grey, fontFamily: 'Sf'),

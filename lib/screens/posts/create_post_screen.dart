@@ -13,13 +13,15 @@ import '../../providers/user_provider.dart';
 import 'dart:io';
 
 class NewPostScreen extends StatefulWidget {
+  const NewPostScreen({super.key});
+
   @override
   _NewPostScreenState createState() => _NewPostScreenState();
 }
 
 class _NewPostScreenState extends State<NewPostScreen> {
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _textController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
   List<File> selectedImages = [];
   List<String> imageURLs = [];
   bool _isUploading = false;
@@ -48,7 +50,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
     }
     print('step one done');
     final uid = FirebaseAuth.instance.currentUser!.uid;
-    print('currentUser uid: ${uid}');
+    print('currentUser uid: $uid');
     final current =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     final currentUser =
@@ -109,11 +111,9 @@ class _NewPostScreenState extends State<NewPostScreen> {
   Future<void> _pickImages() async {
     final picker = ImagePicker();
     final pickedFiles = await picker.pickMultiImage();
-    if (pickedFiles != null) {
-      setState(() {
-        selectedImages.addAll(pickedFiles.map((file) => File(file.path)));
-      });
-    }
+    setState(() {
+      selectedImages.addAll(pickedFiles.map((file) => File(file.path)));
+    });
   }
 
   void _removeImage(int index) {
@@ -327,7 +327,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 197, 236, 197)
+                          color: const Color.fromARGB(255, 197, 236, 197)
                               .withOpacity(0.4),
                           borderRadius: BorderRadius.circular(
                               15), // Adjust the radius to fit the circle
@@ -353,7 +353,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                 ),
                 itemCount: selectedImages.length,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return Stack(
                     children: [

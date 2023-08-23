@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:garden_companion_2/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../models/offers.dart';
 
 class UserProvider with ChangeNotifier {
   final User _currentUser = FirebaseAuth.instance.currentUser!;
@@ -36,7 +35,7 @@ class UserProvider with ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
 
     final email = _prefs.getString('email');
-    print('inside _initPreferences ${email}');
+    print('inside _initPreferences $email');
     if (email == null) {
       await fetchUserProfile();
     } else {
@@ -124,7 +123,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<bool> isFollowingUser(String userId) async {
-    print('inside isFollowingUser ${userId}');
+    print('inside isFollowingUser $userId');
     try {
       DocumentSnapshot followingSnapshot = await FirebaseFirestore.instance
           .collection('users')
@@ -236,7 +235,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> followUser(String otherID) async {
-    print('inside followUser ${otherID}');
+    print('inside followUser $otherID');
     try {
       User? currentUser = _auth.currentUser;
       await FirebaseFirestore.instance
@@ -260,7 +259,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> unFollowing(String otherID) async {
-    print('inside unFollowing ${otherID}');
+    print('inside unFollowing $otherID');
     try {
       User? currentUser = _auth.currentUser;
       await FirebaseFirestore.instance

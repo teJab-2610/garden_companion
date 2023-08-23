@@ -4,7 +4,7 @@ import 'package:garden_companion_2/models/offers.dart';
 class BlogTile extends StatelessWidget {
   final Offer blogItem;
 
-  BlogTile({required this.blogItem});
+  const BlogTile({super.key, required this.blogItem});
 
   @override
   Widget build(BuildContext context) {

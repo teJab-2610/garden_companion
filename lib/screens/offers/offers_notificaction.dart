@@ -51,6 +51,8 @@ class Notification {
 }
 
 class Notifications extends StatefulWidget {
+  const Notifications({super.key});
+
   @override
   _NotificationsState createState() => _NotificationsState();
 }
@@ -198,10 +200,10 @@ class _NotificationsState extends State<Notifications> {
 
   Future<void> fetchNotifications() async {
     try {
-      final User _currentUser = FirebaseAuth.instance.currentUser!;
+      final User currentUser = FirebaseAuth.instance.currentUser!;
       final QuerySnapshot querySnapshot = await _firestore
           .collection('users')
-          .doc(_currentUser.uid)
+          .doc(currentUser.uid)
           .collection('notifications')
           .get();
       setState(() {
@@ -218,7 +220,7 @@ class _NotificationsState extends State<Notifications> {
 
   Widget showDialogBox(String text) {
     return AlertDialog(
-      content: Text('$text'),
+      content: Text(text),
       actions: [
         TextButton(
           onPressed: () {
@@ -287,6 +289,7 @@ class _NotificationsState extends State<Notifications> {
               itemBuilder: (context, index) {
                 final notification = offers[index];
                 return Card(
+
                   child: ListTile(
                     title: FutureBuilder(
                       future: FirebaseFirestore.instance
