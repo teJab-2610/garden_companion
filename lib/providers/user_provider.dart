@@ -23,6 +23,7 @@ class UserProvider with ChangeNotifier {
     phoneNumber: '',
     bookmarks: [],
     groups: [],
+    bio: '',
   );
   MyUser get userProfile => _userProfile;
   User? get currentUser => _currentUser;
@@ -54,9 +55,10 @@ class UserProvider with ChangeNotifier {
       followingCount: _prefs.getInt('followingCount') ?? 0,
       postsCount: _prefs.getInt('postsCount') ?? 0,
       password: '',
-      phoneNumber: '',
+      phoneNumber: _prefs.getString('phoneNumber') ?? '',
       bookmarks: _prefs.getStringList('bookmarks') ?? [],
       groups: _prefs.getStringList('groups') ?? [],
+      bio: _prefs.getString('bio') ?? '',
     );
     notifyListeners();
   }
@@ -101,6 +103,7 @@ class UserProvider with ChangeNotifier {
       phoneNumber: '',
       bookmarks: [],
       groups: [],
+      bio: '',
     );
 
     await _saveUserDataToPreferences();
@@ -116,6 +119,8 @@ class UserProvider with ChangeNotifier {
     await _prefs.setInt('postsCount', _userProfile.postsCount);
     await _prefs.setStringList('bookmarks', _userProfile.bookmarks);
     await _prefs.setStringList('groups', _userProfile.groups);
+    await _prefs.setString('bio', _userProfile.bio);
+    await _prefs.setString('phoneNumber', _userProfile.phoneNumber);
   }
 
   Future<bool> isFollowingUser(String userId) async {
@@ -123,11 +128,11 @@ class UserProvider with ChangeNotifier {
     try {
       DocumentSnapshot followingSnapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc(_currentUser.uid)
+          .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('following')
           .doc(userId)
           .get();
-
+      print(_currentUser.uid);
       return followingSnapshot.exists;
     } catch (e) {
       print('Error checking if user is following: $e');

@@ -1,55 +1,55 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:garden_companion_2/screens/posts/create_post_screen.dart';
-import 'package:garden_companion_2/screens/posts/post_tile.dart';
-import 'package:provider/provider.dart';
+import 'package:garden_companion_2/screens/profile_screens/post_album.dart';
+
 import '../../models/post.dart';
 import '../../providers/post_provider.dart';
-import 'singlepost_screen.dart';
 
-class PostsScreen extends StatefulWidget {
+class UsersPosts extends StatefulWidget {
+  final String userId;
+  UsersPosts({required this.userId});
   @override
-  _PostsScreenState createState() => _PostsScreenState();
+  _UsersPostsState createState() => _UsersPostsState();
 }
 
-class _PostsScreenState extends State<PostsScreen> {
-  late int _currentPage;
-  late int _pageSize; // Number of days per page
-  DateTime currentDate = DateTime.now();
+class _UsersPostsState extends State<UsersPosts> {
   late Future<List<Post>> _fetchPostsFuture;
   bool isFollowing = true;
 
   @override
   void initState() {
     super.initState();
-    _currentPage = 0;
-    _pageSize = 1; // You can adjust this to your desired page size
     _fetchPostsFuture = _fetchPosts();
   }
 
   Future<List<Post>> _fetchPosts() async {
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-    final following = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .collection('following')
-        .get();
-
-    if (following.docs.length - 1 == 0) {
-      isFollowing = false;
+    print("here ${widget.userId}");
+    try {
+      List<Post> posts = [];
+      print("here ${widget.userId}");
+      final postsQuerySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.userId)
+          .collection('posts')
+          .get();
+      print(postsQuerySnapshot.docs[0].data());
+      List<String> uids = postsQuerySnapshot.docs.map((doc) => doc.id).toList();
+      for (String uid in uids) {
+        if (uid == 'dummy') {
+          continue;
+        }
+        final postSnapshot =
+            await FirebaseFirestore.instance.collection('posts').doc(uid).get();
+        final post = Post.fromJson(postSnapshot.data()!);
+        posts.add(post);
+      }
+      posts.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+      return posts;
+    } catch (e) {
+      print(e);
       return [];
     }
-    isFollowing = true;
-    print('Following uids list : ${following.docs.map((doc) => doc.id)}');
-
-    PostProvider postProvider =
-        Provider.of<PostProvider>(context, listen: false);
-    List<Post> posts = await postProvider.fetchFollowingPosts(
-      following.docs.map((doc) => doc.id).toList(),
-    );
-    print('List of posts : ${posts.map((post) => post.title)}}');
-    return posts;
   }
 
   @override
@@ -103,19 +103,12 @@ class _PostsScreenState extends State<PostsScreen> {
                         text: const TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Articles on ',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 30.0,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'poppins'),
-                            ),
-                            TextSpan(
-                              text: 'plants',
+                              text: 'My Posts',
                               style: TextStyle(
                                 color: Color.fromRGBO(76, 175, 80, 1),
                                 fontSize: 30.0,
                                 fontWeight: FontWeight.bold,
+                                fontFamily: 'poppins',
                               ),
                             ),
                           ],
@@ -123,28 +116,7 @@ class _PostsScreenState extends State<PostsScreen> {
                       ),
                     ],
                   ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NewPostScreen()),
-                      );
-                    },
-                    icon: const Icon(Icons.add),
-                  ),
                 ],
-              ),
-            ),
-            const Expanded(
-              child: Center(
-                child: Text(
-                  'Follow people to see posts here.',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 212, 66, 66),
-                    fontSize: 16.0,
-                  ),
-                ),
               ),
             ),
           ],
@@ -176,35 +148,18 @@ class _PostsScreenState extends State<PostsScreen> {
                         text: const TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Articles on ',
+                              text: 'Posts',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Color.fromRGBO(76, 175, 80, 1),
                                 fontSize: 30.0,
                                 fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text: 'plants',
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 30.0,
-                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Poppins',
                               ),
                             ),
                           ],
                         ),
                       ),
                     ],
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NewPostScreen()),
-                      );
-                    },
-                    icon: const Icon(Icons.add),
                   ),
                 ],
               ),
@@ -214,9 +169,9 @@ class _PostsScreenState extends State<PostsScreen> {
                 child: Text(
                   'No posts to show',
                   style: TextStyle(
-                    color: Color.fromARGB(255, 212, 66, 66),
-                    fontSize: 16.0,
-                  ),
+                      color: Color.fromARGB(255, 212, 66, 66),
+                      fontSize: 16.0,
+                      fontFamily: 'Sf'),
                 ),
               ),
             ),
@@ -234,37 +189,25 @@ class _PostsScreenState extends State<PostsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.arrow_back),
+                  ),
                   RichText(
                     text: const TextSpan(
                       children: [
                         TextSpan(
-                          text: 'Articles on ',
+                          text: 'Posts',
                           style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'plants',
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              color: Color.fromRGBO(76, 175, 80, 1),
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Poppins'),
                         ),
                       ],
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NewPostScreen()),
-                      );
-                    },
-                    icon: const Icon(Icons.add),
                   ),
                   IconButton(
                     icon: const Icon(Icons.refresh),
@@ -281,7 +224,7 @@ class _PostsScreenState extends State<PostsScreen> {
                 child: ListView.builder(
                   itemCount: posts.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return BlogTile(blogItem: posts[index]);
+                    return PostTile(post: posts[index]);
                   },
                 ),
               ),

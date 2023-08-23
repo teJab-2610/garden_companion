@@ -41,7 +41,6 @@ class _BlogContentPageState extends State<BlogContentPage> {
         child: Container(
           margin: EdgeInsets.only(top: 40.0), // Adjust the top margin as needed
           padding: EdgeInsets.all(16.0),
-
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

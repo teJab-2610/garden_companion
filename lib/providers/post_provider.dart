@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:garden_companion_2/providers/user_provider.dart';
-import 'package:provider/provider.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/comments.dart';
 import '../models/post.dart';
 import '../models/user.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -16,11 +14,13 @@ class PostProvider with ChangeNotifier {
   List<Post> _posts = [];
   List<Post> get posts => _posts;
 
-  Future<List<Post>> fetchMyPosts(String userId) async {
+  Future<List<Post>> fetchMyPosts() async {
     try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      final uid = auth.currentUser!.uid;
       final userPostQuerySnapshot = await _firestore
           .collection('users')
-          .doc(userId)
+          .doc(uid)
           .collection('userPosts')
           .get();
 
@@ -281,9 +281,11 @@ class PostProvider with ChangeNotifier {
   //     print('Error editing post: $error');
   //   }
   // }
-  Future<void> savePost(String postId, MyUser currentUser) async {
+  Future<void> savePost(String postId) async {
     try {
-      final userRef = _firestore.collection('users').doc(currentUser.uid);
+      final userRef = _firestore
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid);
       final userSnapshot = await userRef.get();
       if (userSnapshot.exists) {
         final bookmarks = List<String>.from(userSnapshot['bookmarks']);
@@ -318,12 +320,11 @@ class PostProvider with ChangeNotifier {
   void removedBookmark() {
     Fluttertoast.showToast(
       msg: "Removed Bookmark!",
-      toastLength:
-          Toast.LENGTH_SHORT, // Duration for which the toast will be displayed
-      gravity: ToastGravity.BOTTOM, // Position of the toast
-      backgroundColor: Colors.grey[600], // Background color of the toast
-      textColor: Colors.white, // Text color of the toast
-      fontSize: 16.0, // Font size of the toast message
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.grey[600],
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 
@@ -334,10 +335,24 @@ class PostProvider with ChangeNotifier {
 
       if (postSnapshot.exists) {
         final authorId = postSnapshot[
-            'postId']; // Assuming authorId is stored in the post document
-
-        if (authorId == currentUser.username) {
+            'uid']; // Assuming authorId is stored in the post document
+        print(authorId);
+        print(currentUser.uid);
+        if (authorId == currentUser.uid) {
           await postRef.delete();
+
+          // Remove the post from the user's posts subcollection
+          final userPostRef = _firestore
+              .collection('users')
+              .doc(currentUser.uid)
+              .collection('posts')
+              .doc(postId);
+          await userPostRef.delete();
+          //decrease count in user collection
+          await _firestore
+              .collection('users')
+              .doc(currentUser.uid)
+              .update({'postsCount': FieldValue.increment(-1)});
 
           // Notify listeners of the change
           notifyListeners();
