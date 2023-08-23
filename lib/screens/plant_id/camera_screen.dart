@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'json_parse.dart';
 
@@ -127,10 +126,10 @@ class _CameraScreenState extends State<CameraScreen> {
       }
 
       // Save JSON data to shared preferences
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString('plantIdJson', responseBody);
+      // final prefs = await SharedPreferences.getInstance();
+      // prefs.setString('plantIdJson', responseBody);
     } else {
-      print(response.statusCode);
+      //print(response.statusCode);
       print(response.stream.bytesToString());
       print('Error: ${response.reasonPhrase}');
       setState(() {

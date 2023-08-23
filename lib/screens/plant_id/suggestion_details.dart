@@ -22,7 +22,7 @@ class SuggestionDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Common Names: ${details['common_names']}'),
+            Text('Common Names: ${details['common_names'].join(", ")}'),
             Text('Taxonomy: ${details['taxonomy']}'),
             Text('URL: ${details['url']}'),
             Text('GBIF ID: ${details['gbif_id']}'),

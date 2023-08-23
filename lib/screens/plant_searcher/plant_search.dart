@@ -114,7 +114,8 @@ class _PlantListScreenState extends State<PlantListScreen> {
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
-      //print(response.statusCode);
+      print(response.statusCode);
+      print(searchText + " here");
       if (response.statusCode == 200) {
         var result = json.decode(response.body);
         ////print("here");
@@ -139,6 +140,7 @@ class _PlantListScreenState extends State<PlantListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(_plants.length);
     return Scaffold(
       appBar: AppBar(
         title: Text('Plant List'),
@@ -218,23 +220,32 @@ List<Plant> parsePlantsFromJson(dynamic jsonData, String search_text) {
   if (jsonData != null && jsonData is Map) {
     final data = jsonData['data'];
     if (data != null && data is List) {
-      //print(jsonData['data']);
+      print(jsonData['data']);
       data.forEach((plantData) {
         if (plantData['id'] <= 3000) {
           //print(plantData['id']);
-          plants.add(Plant(
-              id: plantData['id'],
-              searchText: search_text,
-              name: plantData['common_name'],
-              scientificName: plantData['scientific_name'].toList().join(", "),
-              imageUrl: plantData['default_image']['original_url'],
-              cycle: plantData['cycle'],
-              watering: plantData['watering'],
-              sunlight: plantData['sunlight'].toList().join(", ")));
+          print("hi");
+          //print(plantData['default_image']['original_url']);
+          try {
+            plants.add(Plant(
+                id: plantData['id'],
+                searchText: search_text,
+                name: plantData['common_name'],
+                scientificName:
+                    plantData['scientific_name'].toList().join(", "),
+                imageUrl: plantData['default_image']['original_url'],
+                cycle: plantData['cycle'],
+                watering: plantData['watering'],
+                sunlight: plantData['sunlight'].toList().join(", ")));
+          } catch (e) {
+            print("error");
+          }
         }
+        print("inside3");
       });
-      // //print("inside4");
+      print("inside4");
     }
+    print(plants.length);
   }
 
   return plants;
@@ -290,10 +301,7 @@ class PlantDetailScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                ////print("here");
                 dynamic details = await disease_Details(plant.searchText);
-                //print('success 2');
-                //print("details");
                 Navigator.push(
                   context,
                   MaterialPageRoute(

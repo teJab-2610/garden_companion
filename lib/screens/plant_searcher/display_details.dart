@@ -111,7 +111,7 @@ class disease_Screen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Diseases/Pests'),
+        title: Text('Related Diseases'),
       ),
       body: ListView.builder(
         itemCount: diseaseDetailsList.length,

@@ -76,7 +76,7 @@ class JsonParser {
 
   static Widget _buildSuggestion(
       BuildContext context, Map<String, dynamic> suggestion) {
-    final id = suggestion['id'];
+    //final id = suggestion['id'];
     final name = suggestion['name'];
     final probability = suggestion['probability'];
     final imageUrl = suggestion['similar_images'][0]['url'];
@@ -102,7 +102,6 @@ class JsonParser {
                 width: 100,
                 fit: BoxFit.cover,
               ),
-            Text('ID: $id'),
             Text('Name: $name'),
             Text('Probability: $probability'),
             const Divider(),

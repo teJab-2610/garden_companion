@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:garden_companion_2/screens/home/search_screen.dart';
 import 'package:garden_companion_2/screens/home/splash_screen.dart';
+import 'package:garden_companion_2/screens/plant_health/imagesearchscreens.dart';
 import 'package:garden_companion_2/screens/plant_searcher/plant_search.dart';
 import 'package:garden_companion_2/screens/posts/create_post_screen.dart';
 import 'package:garden_companion_2/screens/profile_screens/profile_screen.dart';
@@ -119,7 +120,7 @@ class _HomePageState extends State<HomePage> {
         if (index == 2) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const CameraScreen()),
+            MaterialPageRoute(builder: (context) => ImageSearchScreen()),
           );
         }
         if (index == 3) {
