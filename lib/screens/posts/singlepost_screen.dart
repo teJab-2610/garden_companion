@@ -16,7 +16,9 @@ class BlogContentPage extends StatefulWidget {
 
 class _BlogContentPageState extends State<BlogContentPage> {
   late PageController _pageController;
-
+  List<String> defaultImages = [
+    "https://firebasestorage.googleapis.com/v0/b/gardencompanion2.appspot.com/o/images%2Fdummy-post-horisontal-thegem-blog-default.jpg?alt=media&token=34f778d3-d19f-4cb9-9fb4-ec7398c4983a",
+  ];
   @override
   void initState() {
     super.initState();
@@ -44,24 +46,32 @@ class _BlogContentPageState extends State<BlogContentPage> {
             children: [
               // Slideshow of images
               SizedBox(
-                height: 200, // Adjust the height as needed
+                height: 200,
                 width: double.infinity,
                 child: PageView.builder(
                   controller: _pageController,
-                  itemCount: widget.blogItem.images.length,
+                  itemCount: widget.blogItem.images.isNotEmpty
+                      ? widget.blogItem.images.length
+                      : 1, // Set itemCount to 1 for default image
                   itemBuilder: (BuildContext context, int index) {
-                    return Image.network(
-                      widget.blogItem.images.isNotEmpty
-                          ? widget.blogItem.images[0]
-                          : "https://firebasestorage.googleapis.com/v0/b/gardencompanion2.appspot.com/o/images%2Fdummy-post-horisontal-thegem-blog-default.jpg?alt=media&token=34f778d3-d19f-4cb9-9fb4-ec7398c4983a",
-                      fit: BoxFit.cover,
-                    );
+                    if (widget.blogItem.images.isNotEmpty) {
+                      return Image.network(
+                        widget.blogItem.images[index],
+                        fit: BoxFit.cover,
+                      );
+                    } else {
+                      return Image.network(
+                        defaultImages[0], // Use the default image URL
+                        fit: BoxFit.cover,
+                      );
+                    }
                   },
                 ),
               ),
-              const SizedBox(height: 16.0),
-              // Right and Left Navigation Buttons
-              Row(
+
+              SizedBox(height: 16.0),
+
+          Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
@@ -78,7 +88,10 @@ class _BlogContentPageState extends State<BlogContentPage> {
                   IconButton(
                     onPressed: () {
                       if (_pageController.page !=
-                          widget.blogItem.images.length - 1) {
+                          (widget.blogItem.images.isNotEmpty
+                                  ? widget.blogItem.images.length
+                                  : 1) -
+                              1) {
                         _pageController.nextPage(
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
@@ -89,6 +102,7 @@ class _BlogContentPageState extends State<BlogContentPage> {
                   ),
                 ],
               ),
+
               const SizedBox(height: 16.0),
               Text(
                 widget.blogItem.title,
