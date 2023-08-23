@@ -41,6 +41,8 @@ class Notification {
 }
 
 class Notifications extends StatefulWidget {
+  const Notifications({super.key});
+
   @override
   _NotificationsState createState() => _NotificationsState();
 }
@@ -180,10 +182,10 @@ class _NotificationsState extends State<Notifications> {
 
   Future<void> fetchNotifications() async {
     try {
-      final User _currentUser = FirebaseAuth.instance.currentUser!;
+      final User currentUser = FirebaseAuth.instance.currentUser!;
       final QuerySnapshot querySnapshot = await _firestore
           .collection('users')
-          .doc(_currentUser.uid)
+          .doc(currentUser.uid)
           .collection('notifications')
           .get();
       offers = querySnapshot.docs
@@ -198,13 +200,13 @@ class _NotificationsState extends State<Notifications> {
 
   Widget showDialogBox(String text) {
     return AlertDialog(
-      content: Text('$text'),
+      content: Text(text),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop(); // Close the dialog
           },
-          child: Text('Close'),
+          child: const Text('Close'),
         ),
       ],
     );
@@ -259,9 +261,9 @@ class _NotificationsState extends State<Notifications> {
               itemBuilder: (context, index) {
                 return Card(
                   color:
-                      Color.fromARGB(224, 172, 199, 177), // Light green color
+                      const Color.fromARGB(224, 172, 199, 177), // Light green color
                   elevation: 3,
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   child: ListTile(
                     title: Text(
                       'Notification ${index + 1}',

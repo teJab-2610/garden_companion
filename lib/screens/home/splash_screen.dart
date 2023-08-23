@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../auths/signin_method.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -23,12 +25,12 @@ class _SplashScreenState extends State<SplashScreen> {
     if (rememberMe) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LoginReg()),
+        MaterialPageRoute(builder: (context) => const LoginReg()),
       );
     }
   }

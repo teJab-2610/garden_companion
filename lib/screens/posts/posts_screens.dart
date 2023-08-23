@@ -6,9 +6,10 @@ import 'package:garden_companion_2/screens/posts/post_tile.dart';
 import 'package:provider/provider.dart';
 import '../../models/post.dart';
 import '../../providers/post_provider.dart';
-import 'singlepost_screen.dart';
 
 class PostsScreen extends StatefulWidget {
+  const PostsScreen({super.key});
+
   @override
   _PostsScreenState createState() => _PostsScreenState();
 }
@@ -98,9 +99,9 @@ class _PostsScreenState extends State<PostsScreen> {
                             _fetchPostsFuture = _fetchPosts();
                           });
                         },
-                        icon: Icon(Icons.refresh),
+                        icon: const Icon(Icons.refresh),
                       ),
-                      SizedBox(width: 8.0),
+                      const SizedBox(width: 8.0),
                       RichText(
                         text: const TextSpan(
                           children: [
@@ -130,7 +131,7 @@ class _PostsScreenState extends State<PostsScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => NewPostScreen()),
+                            builder: (context) => const NewPostScreen()),
                       );
                     },
                     icon: const Icon(Icons.add),
@@ -203,7 +204,7 @@ class _PostsScreenState extends State<PostsScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => NewPostScreen()),
+                            builder: (context) => const NewPostScreen()),
                       );
                     },
                     icon: const Icon(Icons.add),
@@ -263,7 +264,7 @@ class _PostsScreenState extends State<PostsScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => NewPostScreen()),
+                            builder: (context) => const NewPostScreen()),
                       );
                     },
                     icon: const Icon(Icons.add),

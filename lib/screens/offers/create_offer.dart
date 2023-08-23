@@ -5,22 +5,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:garden_companion_2/models/user.dart';
-import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../models/offers.dart';
-import '../../providers/post_provider.dart';
-import '../../providers/user_provider.dart';
 import 'dart:io';
 
 class NewOfferScreen extends StatefulWidget {
+  const NewOfferScreen({super.key});
+
   @override
   _NewPostScreenState createState() => _NewPostScreenState();
 }
 
 class _NewPostScreenState extends State<NewOfferScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _textController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
   List<File> selectedImages = [];
   String imageURLs = "";
   bool _isUploading = false;
@@ -120,11 +119,9 @@ class _NewPostScreenState extends State<NewOfferScreen> {
   Future<void> _pickImages() async {
     final picker = ImagePicker();
     final pickedFiles = await picker.pickMultiImage();
-    if (pickedFiles != null) {
-      setState(() {
-        selectedImages.addAll(pickedFiles.map((file) => File(file.path)));
-      });
-    }
+    setState(() {
+      selectedImages.addAll(pickedFiles.map((file) => File(file.path)));
+    });
   }
 
   void _removeImage(int index) {
@@ -307,7 +304,7 @@ class _NewPostScreenState extends State<NewOfferScreen> {
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 197, 236, 197)
+                          color: const Color.fromARGB(255, 197, 236, 197)
                               .withOpacity(0.4),
                           borderRadius: BorderRadius.circular(
                               15), // Adjust the radius to fit the circle
@@ -333,7 +330,7 @@ class _NewPostScreenState extends State<NewOfferScreen> {
                 ),
                 itemCount: selectedImages.length,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return Stack(
                     children: [

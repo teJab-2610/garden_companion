@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../providers/user_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +31,7 @@ class ProfileScreen extends StatelessWidget {
               ],
             );
           } else {
-            return Text('Not logged in');
+            return const Text('Not logged in');
           }
         },
       ),
