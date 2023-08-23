@@ -12,7 +12,6 @@ class Post {
   final String text;
   List<String> images;
   List<String> likes;
-  final List<Comment> comments;
   final Timestamp timestamp;
 
   Post({
@@ -26,7 +25,6 @@ class Post {
     required this.text,
     required this.images,
     required this.likes,
-    required this.comments,
     required this.timestamp,
   });
 
@@ -41,7 +39,6 @@ class Post {
     String? text,
     List<String>? images,
     List<String>? likes,
-    List<Comment>? comments,
   }) {
     return Post(
       uid: uid ?? this.uid,
@@ -54,25 +51,24 @@ class Post {
       text: text ?? this.text,
       images: images ?? this.images,
       likes: likes ?? this.likes,
-      comments: comments ?? this.comments,
       timestamp: timestamp,
     );
   }
 
   factory Post.fromJson(Map<String, dynamic> json) {
-    final commentsData = json['comments'] as List<dynamic>;
-    final commentsList = commentsData
-        .map((commentData) => Comment.fromJson(commentData))
-        .toList();
+    // final commentsData = json['comments'] as List<dynamic>;
+    // final commentsList = commentsData
+    //     .map((commentData) => Comment.fromJson(commentData))
+    //     .toList();
 
-    // print('uid: ${json['uid']}');
-    // print('postId: ${json['postId']}');
-    // print('userId: ${json['userId']}');
-    // print('likesCount: ${json['likesCount']}');
-    // print('username: ${json['username']}');
-    // print('commentsCount: ${json['commentsCount']}');
-    // print('title: ${json['title']}');
-    // print('text: ${json['text']}');
+    print('uid: ${json['uid']}');
+    print('postId: ${json['postId']}');
+    print('userId: ${json['userId']}');
+    print('likesCount: ${json['likesCount']}');
+    print('username: ${json['username']}');
+    print('commentsCount: ${json['commentsCount']}');
+    print('title: ${json['title']}');
+    print('text: ${json['text']}');
 
     return Post(
       uid: json['uid'] as String,
@@ -85,7 +81,6 @@ class Post {
       text: json['text'] as String,
       images: List<String>.from(json['images'] as List<dynamic>),
       likes: List<String>.from(json['likes'] as List<dynamic>),
-      comments: commentsList,
       timestamp: json['timestamp'] as Timestamp,
     );
   }
@@ -102,7 +97,6 @@ class Post {
       'text': text,
       'images': images,
       'likes': likes,
-      'comments': comments.map((comment) => comment.toJson()).toList(),
       'timestamp': timestamp,
     };
   }

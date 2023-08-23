@@ -59,6 +59,10 @@ class _NewPostScreenState extends State<NewPostScreen> {
     print('step three done');
     // Add the post to Firebase and user's posts subcollection
     await addPostToFirebase(newPost);
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .update({'postsCount': FieldValue.increment(1)});
     print('step four done');
     _navigateBack();
   }
@@ -71,7 +75,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
       username: currentUser.name,
       images: imageURLs,
       userId: currentUser.username,
-      comments: [], // Initialize comments as an empty list
+      // Initialize comments as an empty list
       commentsCount: 0, // Initialize commentsCount
       likes: [],
       likesCount: 0,

@@ -53,6 +53,7 @@ class AuthProvider with ChangeNotifier {
             'name': name,
             'phoneNumber': phonenumber,
             'bookmarks': [],
+            'bio': '',
           });
         } else {
           // Document doesn't exist, create a new one
@@ -66,6 +67,8 @@ class AuthProvider with ChangeNotifier {
             'name': name,
             'phoneNumber': phonenumber,
             'bookmarks': [],
+            'groups': [],
+            'bio': '',
             'uid': userDocRef.id,
           });
           await FirebaseFirestore.instance
@@ -123,7 +126,12 @@ class AuthProvider with ChangeNotifier {
         'followingCount': 0,
         'password': "NA",
         'postsCount': 0,
-        'userId': ""
+        'userId': "",
+        'bio': "",
+        'name': "",
+        'phoneNumber': "",
+        'bookmarks': [],
+        'groups': [],
       });
       await FirebaseFirestore.instance
           .collection('users')

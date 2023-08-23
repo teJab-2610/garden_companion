@@ -35,7 +35,7 @@ class _SearchPageState extends State<SearchPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => OtherAccountPage(documentId: documentId)),
+              builder: (context) => OtherAccountPage(userId: documentId)),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

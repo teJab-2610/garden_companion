@@ -87,19 +87,9 @@ class BlogTile extends StatelessWidget {
                             color: iconColor,
                           ),
                         ),
-                        // IconButton(
-                        //   onPressed: () {
-                        //     // Handle comment button press
-                        //   },
-                        //   icon: Icon(
-                        //     Icons.comment,
-                        //     color: iconColor,
-                        //   ),
-                        // ),
                         IconButton(
                           onPressed: () {
-                            PostProvider()
-                                .savePost(blogItem.postId, currentUser);
+                            PostProvider().savePost(blogItem.postId);
                           },
                           icon: const Icon(
                             Icons.bookmark,
