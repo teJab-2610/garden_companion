@@ -30,26 +30,84 @@ class PlantSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Plant Searcher'),
-      ),
-      body: Column(
-        children: [
-          SearchBar(onSearch: (searchText) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PlantListScreen(
-                  searchText: searchText,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Image.asset(
+                'assets/images/bgplant.jpg', // Replace with your image path
+                width: 300, // Adjust the width as needed
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Plant",
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: " Searcher",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal padding
+              child: Container(
+                padding: EdgeInsets.all(7.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: TextField(
+                  style: TextStyle(color: Colors.green),
+                  decoration: InputDecoration(
+                    hintText: "Search for the plants.....",
+                    hintStyle: TextStyle(color: Colors.green.withOpacity(0.5)),
+                    icon: Icon(Icons.search, color: Colors.green),
+                    border: InputBorder.none,
+                  ),
+                  onSubmitted: (searchText) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PlantListScreen(
+                          searchText: searchText,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
-            );
-          }),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
+
 
 class SearchBar extends StatefulWidget {
   final void Function(String) onSearch;
@@ -143,9 +201,33 @@ class _PlantListScreenState extends State<PlantListScreen> {
     print(_plants.length);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Plant List'),
-        backgroundColor:
-            Colors.green, // Change this color to match your plant theme
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.green, // Set the color of the back arrow button
+        ),
+        elevation: 0.0,
+        title: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Plant",
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: " List",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            )
       ),
       body: ListView.builder(
         itemCount: _plants.isEmpty ? 1 : _plants.length + 1,
@@ -180,15 +262,16 @@ class _PlantListScreenState extends State<PlantListScreen> {
                   ],
                 ),
                 child: ListTile(
+                  contentPadding: EdgeInsets.all(16),
                   title: Text(
                     _plants[index].name,
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   leading: Container(
-                    width: 80,
-                    height: 80,
+                    width: 100,
+                    height: 120,
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
+                      shape: BoxShape.rectangle,
                       image: DecorationImage(
                         fit: BoxFit.cover,
                         image: NetworkImage(_plants[index].imageUrl),
@@ -214,6 +297,7 @@ class _PlantListScreenState extends State<PlantListScreen> {
     );
   }
 }
+
 
 List<Plant> parsePlantsFromJson(dynamic jsonData, String search_text) {
   List<Plant> plants = [];
@@ -251,6 +335,106 @@ List<Plant> parsePlantsFromJson(dynamic jsonData, String search_text) {
   return plants;
 }
 
+// class PlantDetailScreen extends StatelessWidget {
+//   final Plant plant;
+
+//   PlantDetailScreen({required this.plant});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         elevation: 0.0,
+//         backgroundColor: Colors.white,
+//         iconTheme: IconThemeData(
+//           color: Colors.green, // Set the color of the back arrow button
+//         ),
+//         //print plantname in richtext with green color
+//         title: RichText(
+//               text: TextSpan(
+//                 children: [
+//                   TextSpan(
+//                     text: plant.name,
+//                     style: TextStyle(
+//                       color: Colors.green,
+//                       fontSize: 30,
+//                       fontWeight: FontWeight.bold,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             )
+//       ),
+//       body: SingleChildScrollView(
+//         child: Column(
+//           children: [
+//             Image.network(plant.imageUrl),
+//             SizedBox(height: 16),
+//             Text('Scientific Name: ${plant.scientificName}'),
+//             Text('Cycle: ${plant.cycle}'),
+//             Text('Watering: ${plant.watering}'),
+//             Text('Sunlight: ${plant.sunlight}'),
+//             SizedBox(height: 16),
+//             ElevatedButton(
+//               onPressed: () async {
+//                 dynamic details = await fetchMoreDetails(plant.id);
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                     builder: (context) => MoreDetailsScreen(details: details),
+//                   ),
+//                 );
+//               },
+//               child: Text('More Details'),
+//             ),
+//             ElevatedButton(
+//               onPressed: () async {
+//                 dynamic careGuideDetails =
+//                     await care_guideDetails(plant.scientificName);
+//                 //print("success 1");
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                     builder: (context) =>
+//                         careGuideScreen(careGuideDetails: careGuideDetails),
+//                   ),
+//                 );
+//               },
+//               child: Text('Care Guide'),
+//             ),
+//             ElevatedButton(
+//               onPressed: () async {
+//                 dynamic details = await disease_Details(plant.searchText);
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                     builder: (context) =>
+//                         disease_Screen(diseaseDetailsList: details),
+//                   ),
+//                 );
+//               },
+//               child: Text('Diseases/Pests'),
+//             ),
+//             ElevatedButton(
+//               onPressed: () async {
+//                 dynamic FAQ = await FAQ_details(plant.scientificName);
+//                 ////print("success 1");
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                     builder: (context) => FAQ_screen(FAQ: FAQ),
+//                   ),
+//                 );
+//               },
+//               child: Text('FAQ'),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 class PlantDetailScreen extends StatelessWidget {
   final Plant plant;
 
@@ -260,20 +444,42 @@ class PlantDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(plant.name),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Colors.green, // Set the color of the back arrow button
+        ),
+        //print plantname in richtext with green color
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: plant.name,
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Image.network(plant.imageUrl),
+            SizedBox(height: 20),
+            buildInfoRow('   Scientific Name :', plant.scientificName),
+            buildInfoRow('   Cycle           :', plant.cycle),
+            buildInfoRow('   Watering        :', plant.watering),
+            buildInfoRow('   Sunlight        :', plant.sunlight),
             SizedBox(height: 16),
-            Text('Scientific Name: ${plant.scientificName}'),
-            Text('Cycle: ${plant.cycle}'),
-            Text('Watering: ${plant.watering}'),
-            Text('Sunlight: ${plant.sunlight}'),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
+            buildTile(
+              context,
+              'More Details',
+              Color.fromARGB(255, 132, 227, 110),
+              () async {
                 dynamic details = await fetchMoreDetails(plant.id);
                 Navigator.push(
                   context,
@@ -282,10 +488,13 @@ class PlantDetailScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('More Details'),
             ),
-            ElevatedButton(
-              onPressed: () async {
+            // Repeat the same structure for other buttons
+            buildTile(
+              context,
+              'Care Guide',
+              Color.fromARGB(255, 132, 227, 110),
+              () async {
                 dynamic careGuideDetails =
                     await care_guideDetails(plant.scientificName);
                 //print("success 1");
@@ -296,11 +505,15 @@ class PlantDetailScreen extends StatelessWidget {
                         careGuideScreen(careGuideDetails: careGuideDetails),
                   ),
                 );
+
               },
-              child: Text('Care Guide'),
             ),
-            ElevatedButton(
-              onPressed: () async {
+            // Repeat the same structure for other buttons
+            buildTile(
+              context,
+              'Diseases/Pests',
+              Color.fromARGB(255, 132, 227, 110),
+              () async {
                 dynamic details = await disease_Details(plant.searchText);
                 Navigator.push(
                   context,
@@ -310,10 +523,13 @@ class PlantDetailScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Diseases/Pests'),
             ),
-            ElevatedButton(
-              onPressed: () async {
+            // Repeat the same structure for other buttons
+            buildTile(
+              context,
+              'FAQ',
+              Color.fromARGB(255, 132, 227, 110),
+              () async {
                 dynamic FAQ = await FAQ_details(plant.scientificName);
                 ////print("success 1");
                 Navigator.push(
@@ -322,12 +538,57 @@ class PlantDetailScreen extends StatelessWidget {
                     builder: (context) => FAQ_screen(FAQ: FAQ),
                   ),
                 );
-              },
-              child: Text('FAQ'),
+              }
             ),
           ],
         ),
       ),
     );
   }
+
+  Widget buildTile(BuildContext context, String title, Color color, VoidCallback onPressed) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: SizedBox(
+        width: double.infinity,
+        height: 60, // Fixed height for all tiles
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2), // Add margin for spacing
+          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20), // Padding
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+Widget buildInfoRow(String heading, String value) {
+  return Row(
+    children: [
+      Text(
+        heading,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      SizedBox(width: 8), // Add spacing between heading and value
+      Text(
+        value,
+        style: TextStyle(
+          fontSize: 16,
+        ),
+      ),
+    ],
+  );
 }

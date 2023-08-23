@@ -42,7 +42,28 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Image Upload')),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(
+              255, 91, 142, 85), // Set the color of the back arrow button
+        ),
+        title: RichText(
+          text: const TextSpan(
+            children: [
+              TextSpan(
+                text: 'Image Upload',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142, 85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -50,15 +71,30 @@ class _CameraScreenState extends State<CameraScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: _getImageFromCamera,
-                  child: const Text('Pick Image from Camera'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/camepic.jpg', width: 100, height: 100), // Change the dimensions as needed
+                    SizedBox(width: 20), // Add spacing between image and button
+                    ElevatedButton(
+                      onPressed: _getImageFromCamera,
+                      child: const Text('Pick Image from Camera'),
+                    ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: _getImageFromGallery,
-                  child: const Text('Pick Image from Gallery'),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/gllerypic.png', width: 100, height: 100), // Change the dimensions as needed
+                    SizedBox(width: 20), // Add spacing between image and button
+                    ElevatedButton(
+                      onPressed: _getImageFromGallery,
+                      child: const Text('Pick Image from Gallery'),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 Text(uploadStatus, style: const TextStyle(fontSize: 18)),
               ],
             ),
@@ -67,6 +103,7 @@ class _CameraScreenState extends State<CameraScreen> {
       ),
     );
   }
+
 
   Future<void> sendImageToAPI(File imageFile) async {
     var headers = {

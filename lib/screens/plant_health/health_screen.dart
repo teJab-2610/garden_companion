@@ -41,7 +41,28 @@ class _CameraScreen1State extends State<CameraScreen1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Image Upload')),
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(
+              255, 91, 142, 85), // Set the color of the back arrow button
+        ),
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Image Upload',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142, 85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
@@ -49,15 +70,30 @@ class _CameraScreen1State extends State<CameraScreen1> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: _getImageFromCamera,
-                  child: const Text('Pick Image from Camera'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/camepic.jpg', width: 100, height: 100), // Change the dimensions as needed
+                    SizedBox(width: 20), // Add spacing between image and button
+                    ElevatedButton(
+                      onPressed: _getImageFromCamera,
+                      child: const Text('Pick Image from Camera'),
+                    ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: _getImageFromGallery,
-                  child: const Text('Pick Image from Gallery'),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/gllerypic.png', width: 100, height: 100), // Change the dimensions as needed
+                    SizedBox(width: 20), // Add spacing between image and button
+                    ElevatedButton(
+                      onPressed: _getImageFromGallery,
+                      child: const Text('Pick Image from Gallery'),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 Text(uploadStatus, style: const TextStyle(fontSize: 18)),
               ],
             ),
@@ -67,56 +103,56 @@ class _CameraScreen1State extends State<CameraScreen1> {
     );
   }
 
-  Future<void> sendImageToAPI(File imageFile) async {
-    var headers = {
-      'Api-Key': 'OTSszilVvpgUXNRs1TZP2YJRY3biCymMjVNGzjNtkxSgG1pmId',
-      'Content-Type': 'application/json'
-    };
+Future<void> sendImageToAPI(File imageFile) async {
+  var headers = {
+    'Api-Key': 'OTSszilVvpgUXNRs1TZP2YJRY3biCymMjVNGzjNtkxSgG1pmId',
+    'Content-Type': 'application/json'
+  };
 
-    var request = http.Request(
-        'POST', Uri.parse('https://plant.id/api/v3/health_assessment'));
-    request.headers.addAll(headers);
+  var request = http.Request(
+      'POST', Uri.parse('https://plant.id/api/v3/health_assessment'));
+  request.headers.addAll(headers);
 
-    // Convert image to Base64
-    List<int> imageBytes = await imageFile.readAsBytes();
-    String base64Image = base64Encode(imageBytes);
+  // Convert image to Base64
+  List<int> imageBytes = await imageFile.readAsBytes();
+  String base64Image = base64Encode(imageBytes);
 
-    // Prepare the request body
-    var requestBody = json.encode({
-      "images": ["data:image/jpeg;base64,$base64Image"],
-      "similar_images": true,
-    });
-    request.body = requestBody;
+  // Prepare the request body
+  var requestBody = json.encode({
+    "images": ["data:image/jpeg;base64,$base64Image"],
+    "similar_images": true,
+  });
+  request.body = requestBody;
 
-    // Send the request
-    http.StreamedResponse response = await request.send();
+  // Send the request
+  http.StreamedResponse response = await request.send();
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      String responseBody = await response.stream.bytesToString();
-      var jsonData = jsonDecode(responseBody);
-      /////////////////////
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    String responseBody = await response.stream.bytesToString();
+    var jsonData = jsonDecode(responseBody);
+    /////////////////////
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DiseaseScreen(diseaseData: jsonData),
-        ),
-      );
-    } else {
-      print('Error fetching disease details');
-    }
-
-    // Save JSON data to shared preferences
-    //   final prefs = await SharedPreferences.getInstance();
-    //   prefs.setString('plantIdJson', responseBody);
-    // } else {
-    //   //print(response.statusCode);
-    //   print(response.stream.bytesToString());
-    //   print('Error: ${response.reasonPhrase}');
-    //   setState(() {
-    //     uploadStatus = 'Unsuccessful';
-    //   });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DiseaseScreen(diseaseData: jsonData),
+      ),
+    );
+  } else {
+    print('Error fetching disease details');
   }
+
+  // Save JSON data to shared preferences
+  //   final prefs = await SharedPreferences.getInstance();
+  //   prefs.setString('plantIdJson', responseBody);
+  // } else {
+  //   //print(response.statusCode);
+  //   print(response.stream.bytesToString());
+  //   print('Error: ${response.reasonPhrase}');
+  //   setState(() {
+  //     uploadStatus = 'Unsuccessful';
+  //   });
+}
 }
 
 class DiseaseScreen extends StatelessWidget {

@@ -10,7 +10,26 @@ class MoreDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('More Details'),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(255, 91, 142,85), // Set the color of the back arrow button
+        ),
+        //print plantname in richtext with green color
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'More Details',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142,85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(8),
@@ -18,25 +37,55 @@ class MoreDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.network(details['image']),
-            Text('Origin: ${details['origin'].join(", ")}'),
-            Text('Other Names: ${details['other_name']}'),
-            Text('Type: ${details['type']}'),
-            Text('Dimension: ${details['dimension']}'),
-            Text('Propagation: ${details['propagation']}'),
-            Text('Watering: ${details['watering']}'),
-            Text(
-                'Depth Watering Requirement: ${details['depth_watering_requirement']}'),
-            Text(
-                'Volume Water Requirement: ${details['volume_water_requirement']}'),
-            Text('Maintenance: ${details['maintenance']}'),
-            Text('Growth Rate: ${details['growth_rate']}'),
-            Text('Care Level: ${details['care_level']}'),
-            Text('Medicinal: ${details['medicinal']}'),
-            Text('Poisonous to Humans: ${details['poisonous_to_humans']}'),
-            Text('Poisonous to Pets: ${details['poisonous_to_pets']}'),
-            Text('Description: ${details['description']}'),
-
-            // Add other fields you want to display
+            // Text('Origin: ${details['origin'].join(", ")}'),
+            // Text('Other Names: ${details['other_name']}'),
+            // Text('Type: ${details['type']}'),
+            // Text('Dimension: ${details['dimension']}'),
+            // Text('Propagation: ${details['propagation']}'),
+            // Text('Watering: ${details['watering']}'),
+            // Text(
+            //     'Depth Watering Requirement: ${details['depth_watering_requirement']}'),
+            // Text(
+            //     'Volume Water Requirement: ${details['volume_water_requirement']}'),
+            // Text('Maintenance: ${details['maintenance']}'),
+            // Text('Growth Rate: ${details['growth_rate']}'),
+            // Text('Care Level: ${details['care_level']}'),
+            // Text('Medicinal: ${details['medicinal']}'),
+            // Text('Poisonous to Humans: ${details['poisonous_to_humans']}'),
+            // Text('Poisonous to Pets: ${details['poisonous_to_pets']}'),
+            // Text('Description: ${details['description']}'),
+            //make headings bold
+            Text('Origin:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['origin'].join(", ")}'),
+            Text('Other Names:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['other_name']}'),
+            Text('Type:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['type']}'),
+            Text('Dimension:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['dimension']}'),
+            Text('Propagation:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['propagation']}'),
+            Text('Watering:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['watering']}'),
+            Text('Depth Watering Requirement:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['depth_watering_requirement']}'),
+            Text('Volume Water Requirement:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['volume_water_requirement']}'),
+            Text('Maintenance:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['maintenance']}'),
+            Text('Growth Rate:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['growth_rate']}'),
+            Text('Care Level:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['care_level']}'),
+            Text('Medicinal:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['medicinal']}'),
+            Text('Poisonous to Humans:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['poisonous_to_humans']}'),
+            Text('Poisonous to Pets:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['poisonous_to_pets']}'),
+            Text('Description:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${details['description']}'),
+                        // Add other fields you want to display
           ],
         ),
       ),
@@ -55,15 +104,35 @@ class careGuideScreen extends StatelessWidget {
     //print(careGuideDetails['sunlight']);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Care Guide'),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(255, 91, 142,85), // Set the color of the back arrow button
+        ),
+        //print plantname in richtext with green color
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Care Guide',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142,85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Watering: ${careGuideDetails['watering']}'),
-            Text('Sunlight: ${careGuideDetails['sunlight']}'),
+            Text('Watering:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${careGuideDetails['watering']}' ,),Text('\n'),Text('Sunlight:' , style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('${careGuideDetails['sunlight']}'),
             // Add other fields you want to display
           ],
         ),
@@ -80,7 +149,26 @@ class FAQ_screen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FAQ'),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(255, 91, 142,85), // Set the color of the back arrow button
+        ),
+        //print plantname in richtext with green color
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'FAQ',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142,85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(8),
@@ -111,7 +199,26 @@ class disease_Screen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Related Diseases'),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(255, 91, 142,85), // Set the color of the back arrow button
+        ),
+        //print plantname in richtext with green color
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Common Diseases',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142,85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: ListView.builder(
         itemCount: diseaseDetailsList.length,

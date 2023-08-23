@@ -9,30 +9,42 @@ class ImageSearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Image Search Screen'),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(255, 91, 142,85), // Set the color of the back arrow button
+        ),
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Image Search Screen',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142,85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CameraScreen()),
-                );
-              },
-              child: Text('Search for Plant Identification'),
+            Image.asset('assets/images/plant_iden.jpg'), // Add your image asset here
+            SizedBox(height: 20),
+            buildElevatedButton(
+              context,
+              'Search for Plant Identification',
+              const CameraScreen(),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const CameraScreen1()),
-                );
-              },
-              child: Text('Search for Plant Health'),
+            buildElevatedButton(
+              context,
+              'Search for Plant Health',
+              const CameraScreen1(),
             ),
           ],
         ),
@@ -67,4 +79,33 @@ class PlantHealthScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+
+Widget buildElevatedButton(BuildContext context, String text, Widget screen) {
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 10),
+    width: double.infinity,
+    child: ElevatedButton(
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
+      },
+      style: ElevatedButton.styleFrom(
+        primary: Color.fromARGB(255, 91, 142,85), // Background color
+        onPrimary: Colors.white, // Text color
+        padding: EdgeInsets.all(15), // Padding
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15), // Button shape
+        ),
+        elevation: 5, // Elevation
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  );
 }
