@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:garden_companion_2/screens/auths/register_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../providers/auth_provider.dart';
 import '../home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -193,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => RegisterPage()),
+          MaterialPageRoute(builder: (context) => const RegisterPage()),
         );
       },
       child: RichText(
@@ -223,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
       child: ElevatedButton(
         onPressed: () => _onLoginPressed(context),
         style: ElevatedButton.styleFrom(
-          primary: const Color.fromARGB(255, 91, 142, 85),
+          backgroundColor: const Color.fromARGB(255, 91, 142, 85),
           padding: const EdgeInsets.symmetric(horizontal: 132, vertical: 20),
         ),
         child: const Text(
@@ -249,7 +250,7 @@ class _LoginPageState extends State<LoginPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()), // Import HomePage
+        MaterialPageRoute(builder: (context) => const HomePage()), // Import HomePage
       );
     } catch (error) {
       _showLoginFailedDialog(context);
@@ -260,7 +261,7 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Login Failed'),
+        title: const Text('Login Failed'),
         content: const Text('Invalid credentials. Please try again.'),
         actions: [
           TextButton(

@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:garden_companion_2/providers/user_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/comments.dart';
 import '../models/post.dart';
 import '../models/user.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,7 +10,7 @@ class PostProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final prefs = SharedPreferences.getInstance();
   final int batchSize = 10;
-  List<Post> _posts = [];
+  final List<Post> _posts = [];
   List<Post> get posts => _posts;
 
   Future<List<Post>> fetchMyPosts(String userId) async {
@@ -53,10 +50,10 @@ class PostProvider with ChangeNotifier {
           .get();
       print('postsQuerySnapshot.docs.length ${postsQuerySnapshot.docs.length}');
 
-      postsQuerySnapshot.docs.forEach((element) {
+      for (var element in postsQuerySnapshot.docs) {
         print('element.id ${element.id}');
         print('element.data() ${element.data()}');
-      });
+      }
       final newPosts = postsQuerySnapshot.docs
           .map((doc) => Post.fromJson(doc.data()))
           .toList();
@@ -88,7 +85,7 @@ class PostProvider with ChangeNotifier {
           await _firestore.collection('posts').add(newPost.toJson());
       final uid = FirebaseAuth.instance.currentUser!.uid;
       print('step two done');
-      print('currentuser : ${uid}');
+      print('currentuser : $uid');
 
       await FirebaseFirestore.instance
           .collection('users')

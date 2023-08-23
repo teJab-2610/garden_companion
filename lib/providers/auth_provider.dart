@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:garden_companion_2/providers/user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -67,6 +66,7 @@ class AuthProvider with ChangeNotifier {
             'name': name,
             'phoneNumber': phonenumber,
             'bookmarks': [],
+            'uid': userDocRef.id,
           });
           await FirebaseFirestore.instance
               .collection('users')

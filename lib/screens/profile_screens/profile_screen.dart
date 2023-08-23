@@ -22,6 +22,7 @@ class _ProfilePageState extends State<ProfileScreen> {
         .snapshots();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +36,7 @@ class _ProfilePageState extends State<ProfileScreen> {
             return Center(
               child: CircularProgressIndicator(),
             );
+
           }
 
           if (snapshot.hasError) {
