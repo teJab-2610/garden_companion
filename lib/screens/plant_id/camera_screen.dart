@@ -185,17 +185,42 @@ class PlantIdResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Plant ID Results')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(255, 91, 142,85), // Set the color of the back arrow button
+        ),
+        //print plantname in richtext with green color
+        title: RichText(
+          text: TextSpan(
             children: [
-              JsonParser.buildJsonData(context, detailsData),
+              TextSpan(
+                text: 'Plant Results',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142,85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         ),
       ),
+      body: Scrollbar(
+      child: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                JsonParser.buildJsonData(context, detailsData),
+              ],
+            ),
+          ),
+        ),
+        ),
+      )
     );
   }
 }

@@ -10,7 +10,26 @@ class MoreDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('More Details'),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(255, 91, 142,85), // Set the color of the back arrow button
+        ),
+        //print plantname in richtext with green color
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'More Details',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142,85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(8),
@@ -55,7 +74,26 @@ class careGuideScreen extends StatelessWidget {
     //print(careGuideDetails['sunlight']);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Care Guide'),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(255, 91, 142,85), // Set the color of the back arrow button
+        ),
+        //print plantname in richtext with green color
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Care Guide',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142,85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(8),
@@ -80,7 +118,26 @@ class FAQ_screen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FAQ'),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(255, 91, 142,85), // Set the color of the back arrow button
+        ),
+        //print plantname in richtext with green color
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'FAQ',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142,85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(8),

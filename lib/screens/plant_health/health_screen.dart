@@ -44,12 +44,12 @@ class _CameraScreen1State extends State<CameraScreen1> {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Color.fromARGB(
               255, 91, 142, 85), // Set the color of the back arrow button
         ),
         title: RichText(
-          text: TextSpan(
+          text: const TextSpan(
             children: [
               TextSpan(
                 text: 'Image Upload',
@@ -166,7 +166,26 @@ class DiseaseScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Disease Screen'),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(
+              255, 91, 142, 85), // Set the color of the back arrow button
+        ),
+        title: RichText(
+          text: const TextSpan(
+            children: [
+              TextSpan(
+                text: 'Disease Results',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142, 85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: ListView.builder(
         itemCount: suggestions.length,

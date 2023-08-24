@@ -7,39 +7,34 @@ class JsonParser {
       final resultValue = data['result'];
 
       if (resultValue != null) {
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                //child: Text('Result: $resultValue'),
-              ),
-              const SizedBox(height: 10),
-              _buildDataFields(context, data['result']),
-            ],
-          ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              //child: Text('Result: $resultValue'),
+            ),
+            const SizedBox(height: 10),
+            _buildPlantList(context, data['result']),
+          ],
         );
       }
     }
     return Container(); // Return an empty container if not displaying anything
   }
 
-  static Widget _buildDataFields(BuildContext context, dynamic data) {
+  static Widget _buildPlantList(BuildContext context, dynamic data) {
     if (data is Map) {
       final isPlantProbability = data['is_plant']['probability'];
       final suggestions = data['classification']['suggestions'];
-      if (isPlantProbability > 0.5) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Is Plant Probability: $isPlantProbability'),
-            ),
-            const SizedBox(height: 10),
-            _buildSuggestionsList(context, suggestions),
-          ],
+
+      if (isPlantProbability > 0.5 && suggestions.isNotEmpty) {
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: suggestions.length,
+          itemBuilder: (context, index) {
+            return _buildSuggestion(context, suggestions[index]);
+          },
         );
       } else {
         return const Column(
@@ -59,27 +54,10 @@ class JsonParser {
     return Container(); // Return an empty container if not displaying anything
   }
 
-  static Widget _buildSuggestionsList(
-      BuildContext context, List<dynamic> suggestions) {
-    if (suggestions.isNotEmpty) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: suggestions
-            .map<Widget>((suggestion) => _buildSuggestion(
-                context, suggestion)) // Pass context as a parameter
-            .toList(),
-      );
-    }
-    //print("suggestions empty");
-    return Container(); // Return an empty container if not displaying anything
-  }
-
   static Widget _buildSuggestion(
       BuildContext context, Map<String, dynamic> suggestion) {
-    //final id = suggestion['id'];
     final name = suggestion['name'];
     final probability = suggestion['probability'];
-    final imageUrl = suggestion['similar_images'][0]['url'];
 
     return GestureDetector(
       onTap: () async {
@@ -95,13 +73,12 @@ class JsonParser {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (imageUrl != null)
-              Image.network(
-                imageUrl,
-                height: 100,
-                width: 100,
-                fit: BoxFit.cover,
-              ),
+            Image.network(
+              suggestion['similar_images'][0]['url'],
+              height: 100,
+              width: 100,
+              fit: BoxFit.cover,
+            ),
             Text('Name: $name'),
             Text('Probability: $probability'),
             const Divider(),

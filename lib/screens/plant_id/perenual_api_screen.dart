@@ -90,7 +90,26 @@ class _PerenualApiScreenState extends State<PerenualApiScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.plantName),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(255, 91, 142,85), // Set the color of the back arrow button
+        ),
+        //print plantname in richtext with green color
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: widget.plantName,
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142,85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: Center(
         child: CircularProgressIndicator(),
@@ -105,83 +124,96 @@ class PlantDetailScreen extends StatelessWidget {
   final String plantName;
   final String plantImageUrl;
 
-  PlantDetailScreen(
-      {required this.plantId,
-      required this.plantSciName,
-      required this.plantName,
-      required this.plantImageUrl});
+  PlantDetailScreen({
+    required this.plantId,
+    required this.plantSciName,
+    required this.plantName,
+    required this.plantImageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(plantSciName),
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(
+          color: Color.fromARGB(255, 91, 142, 85),
+        ),
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: plantSciName,
+                style: TextStyle(
+                  color: Color.fromARGB(255, 91, 142, 85),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //   Image.network(plant.imageUrl),
-            //   SizedBox(height: 16),
-            //   Text('Scientific Name: ${plant.scientificName}'),
-            //   Text('Cycle: ${plant.cycle}'),
-            //   Text('Watering: ${plant.watering}'),
-            //   Text('Sunlight: ${plant.sunlight}'),
-            //SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                dynamic details = await fetchMoreDetails(plantId);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MoreDetailsScreen(details: details),
-                  ),
-                );
-              },
-              child: Text('More Details'),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  dynamic details = await fetchMoreDetails(plantId);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MoreDetailsScreen(details: details),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // Set the background color
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                ),
+                child: Text('More Details', style: TextStyle(fontSize: 18)),
+              ),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                dynamic careGuideDetails =
-                    await care_guideDetails(plantSciName);
-                //print("success 1");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        careGuideScreen(careGuideDetails: careGuideDetails),
-                  ),
-                );
-              },
-              child: Text('Care Guide'),
+            SizedBox(height: 20),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  dynamic careGuideDetails = await care_guideDetails(plantSciName);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => careGuideScreen(careGuideDetails: careGuideDetails),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // Set the background color
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                ),
+                child: Text('Care Guide', style: TextStyle(fontSize: 18)),
+              ),
             ),
-            // ElevatedButton(
-            //   onPressed: () async {
-            //     ////print("here");
-            //     dynamic details = await disease_Details(plant.searchText);
-            //     //print('success 2');
-            //     //print("details");
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) =>
-            //             disease_Screen(diseaseDetailsList: details),
-            //       ),
-            //     );
-            //   },
-            //   child: Text('Diseases/Pests'),
-            // ),
-            ElevatedButton(
-              onPressed: () async {
-                dynamic FAQ = await FAQ_details(plantSciName);
-                ////print("success 1");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => FAQ_screen(FAQ: FAQ),
-                  ),
-                );
-              },
-              child: Text('FAQ'),
+            SizedBox(height: 20),
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  dynamic FAQ = await FAQ_details(plantSciName);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FAQ_screen(FAQ: FAQ),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green, // Set the background color
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                ),
+                child: Text('FAQ', style: TextStyle(fontSize: 18)),
+              ),
             ),
           ],
         ),
