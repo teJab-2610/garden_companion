@@ -24,7 +24,7 @@ git clone https://github.com/teJab-2610/garden_companion.git
 
 Note: You must have git installed on your system.
 
-Now, run the following commands on the terminal?
+Now, run the following commands on the terminal:
 ~~~bash
 cd .\garden_companion\
 flutter pub get
