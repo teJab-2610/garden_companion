@@ -55,6 +55,9 @@ dependencies:
   carousel_slider: ^4.2.1
   fluttertoast: ^8.2.2
   firebase_storage: ^11.2.6
+  cached_network_image: ^3.2.3
+  scrollable_positioned_list: ^0.3.8  
+  url_launcher: ^6.1.12
 
 
 dev_dependencies:
@@ -77,11 +80,15 @@ flutter:
     - assets/images/login_bg.png
     - assets/images/google_logo.png
     - assets/images/app_intro.jpg
+
     - assets/images/plant_bg.jpg
     - assets/images/bgplant.jpg
     - assets/images/plant_iden.jpg
     - assets/images/camepic.jpg
     - assets/images/gllerypic.png
+
+    - assets/images/b2.png
+    - assets/images/bg.jpg
 
 
 

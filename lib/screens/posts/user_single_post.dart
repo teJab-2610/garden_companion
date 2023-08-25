@@ -8,7 +8,7 @@ import '../../providers/user_provider.dart';
 class BlogContentPage extends StatefulWidget {
   final Post blogItem;
 
-  const BlogContentPage({super.key, required this.blogItem});
+  BlogContentPage({required this.blogItem});
 
   @override
   _BlogContentPageState createState() => _BlogContentPageState();
@@ -33,15 +33,14 @@ class _BlogContentPageState extends State<BlogContentPage> {
 
   @override
   Widget build(BuildContext context) {
-    const iconColor = Color(0xFF5B8E55); // ARGB(255, 91, 142, 85)
+    final iconColor = Color(0xFF5B8E55); // ARGB(255, 91, 142, 85)
     final currentUser =
         Provider.of<UserProvider>(context, listen: false).userProfile;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-
-          margin: const EdgeInsets.only(top: 40.0), // Adjust the top margin as needed
-          padding: const EdgeInsets.all(16.0),
+          margin: EdgeInsets.only(top: 40.0), // Adjust the top margin as needed
+          padding: EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -69,23 +68,21 @@ class _BlogContentPageState extends State<BlogContentPage> {
                   },
                 ),
               ),
-             
-
               SizedBox(height: 16.0),
-
-          Row(
+// Right and Left Navigation Buttons
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
                     onPressed: () {
                       if (_pageController.page != 0) {
                         _pageController.previousPage(
-                          duration: const Duration(milliseconds: 300),
+                          duration: Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                         );
                       }
                     },
-                    icon: const Icon(Icons.arrow_back),
+                    icon: Icon(Icons.arrow_back),
                   ),
                   IconButton(
                     onPressed: () {
@@ -95,12 +92,12 @@ class _BlogContentPageState extends State<BlogContentPage> {
                                   : 1) -
                               1) {
                         _pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
+                          duration: Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                         );
                       }
                     },
-                    icon: const Icon(Icons.arrow_forward),
+                    icon: Icon(Icons.arrow_forward),
                   ),
                 ],
               ),
@@ -113,22 +110,14 @@ class _BlogContentPageState extends State<BlogContentPage> {
                   fontSize: 24.0,
                 ),
               ),
-              const SizedBox(height: 8.0),
+              SizedBox(height: 8.0),
               Text(
                 "By ${widget.blogItem.username}",
                 style: const TextStyle(
                   color: Colors.grey,
                 ),
               ),
-              const SizedBox(height: 16.0),
-              Text(
-                widget.blogItem.text,
-                style: const TextStyle(
-                  fontSize: 16.0,
-                ),
-              ),
-              const SizedBox(height: 16.0),
-
+              SizedBox(height: 16.0),
               Row(
                 children: [
                   IconButton(
@@ -137,7 +126,7 @@ class _BlogContentPageState extends State<BlogContentPage> {
                           .likePost(widget.blogItem.postId, currentUser);
                       setState(() {});
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.thumb_up,
                       color: iconColor,
                     ),
@@ -155,11 +144,6 @@ class _BlogContentPageState extends State<BlogContentPage> {
                         return Text('$likesCount likes');
                       }
                     },
-
-                    icon: const Icon(
-                      Icons.thumb_down,
-                      color: iconColor,
-                    ),
                   ),
                   IconButton(
                     onPressed: () async {
@@ -167,7 +151,7 @@ class _BlogContentPageState extends State<BlogContentPage> {
                           .removeLike(widget.blogItem.postId, currentUser);
                       setState(() {});
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.thumb_down,
                       color: iconColor,
                     ),
@@ -176,7 +160,7 @@ class _BlogContentPageState extends State<BlogContentPage> {
                     onPressed: () {
                       PostProvider().savePost(widget.blogItem.postId);
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.bookmark,
                       color: iconColor,
                     ),
@@ -189,7 +173,7 @@ class _BlogContentPageState extends State<BlogContentPage> {
                   fontSize: 16.0,
                 ),
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 16.0),
             ],
           ),
         ),

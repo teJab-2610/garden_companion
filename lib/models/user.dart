@@ -10,6 +10,7 @@ class MyUser {
   int postsCount;
   List<String> bookmarks;
   List<String> groups;
+  String bio;
 
   MyUser({
     required this.uid,
@@ -23,6 +24,7 @@ class MyUser {
     required this.postsCount,
     required this.bookmarks,
     required this.groups,
+    required this.bio,
   });
 
   factory MyUser.fromJson(Map<String, dynamic> json, String uid) {
@@ -48,6 +50,7 @@ class MyUser {
       postsCount: json['postsCount'] as int,
       bookmarks: List<String>.from(json['bookmarks'] as List<dynamic>),
       groups: List<String>.from(json['groups'] as List<dynamic>),
+      bio: json['bio'] as String,
     );
   }
 
@@ -64,6 +67,7 @@ class MyUser {
       'postsCount': postsCount,
       'bookmarks': bookmarks,
       'groups': groups,
+      'bio': bio,
     };
   }
 }

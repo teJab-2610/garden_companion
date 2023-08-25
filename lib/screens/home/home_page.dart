@@ -4,10 +4,12 @@ import 'package:garden_companion_2/screens/home/search_screen.dart';
 import 'package:garden_companion_2/screens/home/splash_screen.dart';
 import 'package:garden_companion_2/screens/plant_health/imagesearchscreens.dart';
 import 'package:garden_companion_2/screens/plant_searcher/plant_search.dart';
+import 'package:garden_companion_2/screens/offers/offers_list.dart';
 import 'package:garden_companion_2/screens/posts/create_post_screen.dart';
 import 'package:garden_companion_2/screens/profile_screens/profile_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import '../Groups/groups_list.dart';
+import '../groups/groups_page.dart';
 import '../posts/posts_screens.dart';
 import '../plant_id/camera_screen.dart';
 
@@ -45,7 +47,14 @@ class _HomePageState extends State<HomePage> {
   void _navigateToProfilePage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const ProfileScreen()),
+      MaterialPageRoute(builder: (context) => const OffersList()),
+    );
+  }
+
+  void _navigateToGroupsPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const GroupsPage()),
     );
   }
 
@@ -94,6 +103,8 @@ class _HomePageState extends State<HomePage> {
       selectedItemColor: const Color.fromARGB(255, 43, 114, 7),
       unselectedItemColor: Colors.grey,
       //make the bar color blue
+
+      backgroundColor: const Color.fromARGB(255, 88, 249, 13),
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -122,12 +133,16 @@ class _HomePageState extends State<HomePage> {
             context,
             MaterialPageRoute(builder: (context) => ImageSearchScreen()),
           );
+
         }
         if (index == 3) {
           _navigateToPostsPage(context);
         }
         if (index == 4) {
-          
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ProfileScreen()),
+          );
         }
       },
     );

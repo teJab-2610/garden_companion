@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,55 +13,15 @@ class PostProvider with ChangeNotifier {
   final List<Post> _posts = [];
   List<Post> get posts => _posts;
 
-  // Future<List<Post>> fetchUserPosts(String userId) async {
-  //   try {
-  //     final userPostQuerySnapshot = await _firestore
-  //         .collection('users')
-  //         .doc(userId)
-  //         .collection('userPosts')
-  //         .get();
-
-  //     final postIds = userPostQuerySnapshot.docs
-  //         .map((doc) => doc['postId'] as String)
-  //         .toList();
-
-  //     final postsQuerySnapshot = await _firestore
-  //         .collection('posts')
-  //         .where(FieldPath.documentId, whereIn: postIds)
-  //         .get();
-
-  //     final userPosts = postsQuerySnapshot.docs
-  //         .map((doc) => Post.fromJson(doc.data()))
-  //         .toList();
-  //     return userPosts;
-  //   } catch (error) {
-  //     print('Error fetching user posts: $error');
-  //     return [];
-  //   }
-  // }
-
-  Future<List<Post>> fetchUserPosts(
-      String userId, String lastFetchedPostId) async {
+  Future<List<Post>> fetchMyPosts() async {
     try {
-      Query query = _firestore
+      FirebaseAuth auth = FirebaseAuth.instance;
+      final uid = auth.currentUser!.uid;
+      final userPostQuerySnapshot = await _firestore
           .collection('users')
-          .doc(userId)
+          .doc(uid)
           .collection('userPosts')
-          .orderBy('timestamp', descending: true)
-          .limit(batchSize);
-
-      if (lastFetchedPostId.isNotEmpty) {
-        final lastFetchedPostDoc = await _firestore
-            .collection('users')
-            .doc(userId)
-            .collection('userPosts')
-            .doc(lastFetchedPostId)
-            .get();
-
-        query = query.startAfterDocument(lastFetchedPostDoc);
-      }
-
-      final userPostQuerySnapshot = await query.get();
+          .get();
 
       final postIds = userPostQuerySnapshot.docs
           .map((doc) => doc['postId'] as String)
@@ -118,18 +79,19 @@ class PostProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addPost(Post newPost, MyUser currentUser) async {
+  Future<void> addPost(Post newPost) async {
     try {
       print('step one done');
       // Add the new post to Firestore
       final postDocRef =
           await _firestore.collection('posts').add(newPost.toJson());
+      final uid = FirebaseAuth.instance.currentUser!.uid;
       print('step two done');
-      print('currentuser : ${currentUser.uid}');
+      print('currentuser : $uid');
 
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(currentUser.uid)
+          .doc(uid)
           .collection('posts')
           .doc(postDocRef.id)
           .set({'postId': postDocRef.id});
@@ -155,8 +117,6 @@ class PostProvider with ChangeNotifier {
       // Update locally and in preferences
       newPost = newPost.copyWith(postId: postDocRef.id);
       _posts.add(newPost);
-      //update local preferences without setString
-      await saveToPreferences('postsCount', currentUser.postsCount + 1);
 
       notifyListeners();
     } catch (error) {
@@ -186,6 +146,26 @@ class PostProvider with ChangeNotifier {
     }
   }
 
+  //get likes count method
+  Future<int> getLikesCount(String postId) async {
+    try {
+      final postRef = _firestore.collection('posts').doc(postId);
+      final postSnapshot = await postRef.get();
+      if (postSnapshot.exists) {
+        //get the likesCount field from the jSOn
+        final likesCount = postSnapshot['likesCount'];
+        notifyListeners();
+        return likesCount;
+      }
+
+      //return 0 if post does not exist
+      return 0;
+    } catch (error) {
+      print('Error getting likes count: $error');
+      return 0;
+    }
+  }
+
   Future<void> removeLike(String postId, MyUser currentUser) async {
     try {
       final postRef = _firestore.collection('posts').doc(postId);
@@ -200,6 +180,7 @@ class PostProvider with ChangeNotifier {
       } else {
         alreadyRemoved();
       }
+      notifyListeners();
     } catch (error) {
       print('Error removing like: $error');
     }
@@ -299,9 +280,11 @@ class PostProvider with ChangeNotifier {
   //     print('Error editing post: $error');
   //   }
   // }
-  Future<void> savePost(String postId, MyUser currentUser) async {
+  Future<void> savePost(String postId) async {
     try {
-      final userRef = _firestore.collection('users').doc(currentUser.uid);
+      final userRef = _firestore
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid);
       final userSnapshot = await userRef.get();
       if (userSnapshot.exists) {
         final bookmarks = List<String>.from(userSnapshot['bookmarks']);
@@ -336,12 +319,11 @@ class PostProvider with ChangeNotifier {
   void removedBookmark() {
     Fluttertoast.showToast(
       msg: "Removed Bookmark!",
-      toastLength:
-          Toast.LENGTH_SHORT, // Duration for which the toast will be displayed
-      gravity: ToastGravity.BOTTOM, // Position of the toast
-      backgroundColor: Colors.grey[600], // Background color of the toast
-      textColor: Colors.white, // Text color of the toast
-      fontSize: 16.0, // Font size of the toast message
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.grey[600],
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 
@@ -352,10 +334,24 @@ class PostProvider with ChangeNotifier {
 
       if (postSnapshot.exists) {
         final authorId = postSnapshot[
-            'postId']; // Assuming authorId is stored in the post document
-
-        if (authorId == currentUser.username) {
+            'uid']; // Assuming authorId is stored in the post document
+        print(authorId);
+        print(currentUser.uid);
+        if (authorId == currentUser.uid) {
           await postRef.delete();
+
+          // Remove the post from the user's posts subcollection
+          final userPostRef = _firestore
+              .collection('users')
+              .doc(currentUser.uid)
+              .collection('posts')
+              .doc(postId);
+          await userPostRef.delete();
+          //decrease count in user collection
+          await _firestore
+              .collection('users')
+              .doc(currentUser.uid)
+              .update({'postsCount': FieldValue.increment(-1)});
 
           // Notify listeners of the change
           notifyListeners();

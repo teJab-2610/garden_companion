@@ -8,7 +8,7 @@ class UserProvider with ChangeNotifier {
   final User _currentUser = FirebaseAuth.instance.currentUser!;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late SharedPreferences _prefs;
-  late FirebaseFirestore _firestore;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   MyUser _userProfile = MyUser(
     uid: '',
@@ -22,6 +22,7 @@ class UserProvider with ChangeNotifier {
     phoneNumber: '',
     bookmarks: [],
     groups: [],
+    bio: '',
   );
   MyUser get userProfile => _userProfile;
   User? get currentUser => _currentUser;
@@ -53,9 +54,10 @@ class UserProvider with ChangeNotifier {
       followingCount: _prefs.getInt('followingCount') ?? 0,
       postsCount: _prefs.getInt('postsCount') ?? 0,
       password: '',
-      phoneNumber: '',
+      phoneNumber: _prefs.getString('phoneNumber') ?? '',
       bookmarks: _prefs.getStringList('bookmarks') ?? [],
       groups: _prefs.getStringList('groups') ?? [],
+      bio: _prefs.getString('bio') ?? '',
     );
     notifyListeners();
   }
@@ -100,6 +102,7 @@ class UserProvider with ChangeNotifier {
       phoneNumber: '',
       bookmarks: [],
       groups: [],
+      bio: '',
     );
 
     await _saveUserDataToPreferences();
@@ -115,6 +118,8 @@ class UserProvider with ChangeNotifier {
     await _prefs.setInt('postsCount', _userProfile.postsCount);
     await _prefs.setStringList('bookmarks', _userProfile.bookmarks);
     await _prefs.setStringList('groups', _userProfile.groups);
+    await _prefs.setString('bio', _userProfile.bio);
+    await _prefs.setString('phoneNumber', _userProfile.phoneNumber);
   }
 
   Future<bool> isFollowingUser(String userId) async {
@@ -122,16 +127,51 @@ class UserProvider with ChangeNotifier {
     try {
       DocumentSnapshot followingSnapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc(_currentUser.uid)
+          .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('following')
           .doc(userId)
           .get();
-
+      print(_currentUser.uid);
       return followingSnapshot.exists;
     } catch (e) {
       print('Error checking if user is following: $e');
       return false;
     }
+  }
+
+  Future<List<String>> getCommonFollowers(String userUid) async {
+    List<String> commonFollowers = [];
+
+    try {
+      // Get the user's followers
+      QuerySnapshot followersSnapshot = await _firestore
+          .collection('users')
+          .doc(userUid)
+          .collection('followers')
+          .get();
+      List<String> followers =
+          followersSnapshot.docs.map((doc) => doc.id).toList();
+
+      QuerySnapshot followingSnapshot = await _firestore
+          .collection('users')
+          .doc(userUid)
+          .collection('following')
+          .get();
+      List<String> following =
+          followingSnapshot.docs.map((doc) => doc.id).toList();
+
+      // Find the common followers
+      for (String followerUid in followers) {
+        if (following.contains(followerUid)) {
+          commonFollowers.add(followerUid);
+        }
+      }
+      notifyListeners();
+    } catch (error) {
+      print("Error in getting common followers: $error");
+    }
+
+    return commonFollowers;
   }
 
   Future<void> updateFollowerCount(String userId, bool increment) async {

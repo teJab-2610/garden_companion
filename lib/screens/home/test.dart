@@ -20,7 +20,7 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
     setState(() {
       selectedImages.addAll(pickedFiles.map((file) => File(file.path)));
     });
-    }
+    }  }
 
   void _removeImage(int index) {
     setState(() {
@@ -43,7 +43,6 @@ class _ImageUploadScreenState extends State<ImageUploadScreen> {
     }
 
     // Do something with the imageURLs array (e.g., save it to a database)
-    print("Image URLs: $imageURLs");
 
     setState(() {
       selectedImages.clear();
