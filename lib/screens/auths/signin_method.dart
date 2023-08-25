@@ -156,7 +156,7 @@ class _LoginRegState extends State<LoginReg> {
       await authProvider.loginWithGoogle();
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => ProfileScreen()),
       );
     } catch (error) {
       _showErrorDialog(context, 'Google Sign-In failed: $error');

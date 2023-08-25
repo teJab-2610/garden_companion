@@ -134,6 +134,8 @@ class AuthProvider with ChangeNotifier {
       await _firestore.collection('users').doc(userId).set({
         'email': email,
       });
+      final name = email.substring(0, email.indexOf('@'));
+      final userrId = email.substring(0, email.indexOf('@'));
 
       final userDocRef = _firestore.collection('users').doc(userId);
       await userDocRef.set({
@@ -142,9 +144,9 @@ class AuthProvider with ChangeNotifier {
         'followingCount': 0,
         'password': "NA",
         'postsCount': 0,
-        'userId': "",
+        'userId': userrId,
         'bio': "",
-        'name': "",
+        'name': name,
         'phoneNumber': "",
         'bookmarks': [],
         'groups': [],
@@ -171,9 +173,18 @@ class AuthProvider with ChangeNotifier {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
-          .collection('items')
+          .collection('notifications')
           .doc('dummy')
-          .set({});
+          .set({
+        'notifId': 'dummy',
+        'recieverItemId': 'dummy',
+        'recieverItemTitle': 'dummy',
+        'recieverUid': 'dummy',
+        'sender': 'dummy',
+        'senderItemId': 'dummy',
+        'senderItemTitle': 'dummy',
+        'timestamp': 'dummy',
+      });
 
       print('User profile created');
     } catch (e) {
