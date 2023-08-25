@@ -57,9 +57,6 @@ graph TD;
     M --> |More Details| N[Care Guide & FAQs]
     I --> |Plus icon| O[New post screen]
 ```````
-<script>
-mermaid.initialize({ startOnLoad: true });
-</script>
 
 ##Features
 
