@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>645779248201-9ev4co28ktueoghji7v15cugoo96evl7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.645779248201-9ev4co28ktueoghji7v15cugoo96evl7</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDtD80Tyz3kNvQiYny7G1IaK3ydXBymp8o</string>
+	<key>GCM_SENDER_ID</key>
+	<string>645779248201</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.gardenCompanion2.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>gardencompanion2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>gardencompanion2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:645779248201:ios:c9be271e472310bccedb98</string>
+</dict>
+</plist>

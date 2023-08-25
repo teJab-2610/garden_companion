@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "645779248201",
+    "firebase_url": "https://gardencompanion2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "gardencompanion2",
+    "storage_bucket": "gardencompanion2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645779248201:android:062dc5e0f713d2c0cedb98",
+        "android_client_info": {
+          "package_name": "com.example.garden_companion_2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "645779248201-3ug4vjpd8c4so2tprphs6cglg6rk051o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.garden_companion_2",
+            "certificate_hash": "bbe2925591fa5082287280822d194019ef20006b"
+          }
+        },
+        {
+          "client_id": "645779248201-taifntaha1d86v4if4p2c5jtjk4pn7no.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCwLTREc6ywDz7bPf1wD2Vt8bkXResvYg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645779248201-3r7t0s52fhcb4t0ntfk4r8qt3vn9i7bt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "645779248201-9ev4co28ktueoghji7v15cugoo96evl7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gardenCompanion2.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
