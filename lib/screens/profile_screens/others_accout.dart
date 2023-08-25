@@ -11,6 +11,7 @@ import 'drawer.dart';
 class OtherAccountPage extends StatefulWidget {
   final String userId;
   OtherAccountPage({required this.userId});
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }

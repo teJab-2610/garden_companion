@@ -114,7 +114,9 @@ class _NewPostScreenState extends State<NewPostScreen> {
     setState(() {
       selectedImages.addAll(pickedFiles.map((file) => File(file.path)));
     });
+    }
   }
+
 
   void _removeImage(int index) {
     setState(() {

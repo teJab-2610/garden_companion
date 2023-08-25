@@ -39,10 +39,9 @@ class _BlogContentPageState extends State<BlogContentPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.only(top: 40.0), // Adjust the top margin as needed
-          padding: EdgeInsets.all(16.0),
 
-
+          margin: const EdgeInsets.only(top: 40.0), // Adjust the top margin as needed
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -70,6 +69,7 @@ class _BlogContentPageState extends State<BlogContentPage> {
                   },
                 ),
               ),
+             
 
               SizedBox(height: 16.0),
 
@@ -121,6 +121,14 @@ class _BlogContentPageState extends State<BlogContentPage> {
                 ),
               ),
               const SizedBox(height: 16.0),
+              Text(
+                widget.blogItem.text,
+                style: const TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+
               Row(
                 children: [
                   IconButton(
@@ -147,6 +155,11 @@ class _BlogContentPageState extends State<BlogContentPage> {
                         return Text('$likesCount likes');
                       }
                     },
+
+                    icon: const Icon(
+                      Icons.thumb_down,
+                      color: iconColor,
+                    ),
                   ),
                   IconButton(
                     onPressed: () async {
