@@ -68,25 +68,31 @@ class BlogTile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () async {
-                        await deleteOffer(blogItem);
+                 FirebaseAuth.instance.currentUser!.uid != blogItem.originaluid
+                      ? const SizedBox.shrink()
+                      : Positioned(
+                          top: -13,
+                          right: 0,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.delete,
+                              size: 20,
+                              color: Colors.red,
+                            ),
+                            onPressed: () async {
+                              await deleteOffer(blogItem);
 
-                        Fluttertoast.showToast(
-                            msg: "Offer deleted",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.green[300],
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                      },
-                    ),
-                  ),
+                              Fluttertoast.showToast(
+                                  msg: "Offer deleted",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.green[300],
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            },
+                          ),
+                        ),
                 ],
               ),
             ),
