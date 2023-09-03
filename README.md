@@ -71,11 +71,11 @@ The following are the features of our app. They are discussed in detail later in
 7. **Offerings**: Users can put up their produce for exchange on the offerings page, here other users can view and finalize deals.
 
 ## Contributions
-Teja Battula: Authentication, Profiles, Firebase, Community posts, Offers.
-Andaluri SPVM Aditya: Authentication, All Pages UI, Community posts.
-Vidhyabhushan Mallela: Plant Identification using Plant.id API, plant search using Perennial API.
-Chetan Moturi: Please search using Perennial API.
-VSKSS Narayana Rao: Group Chat, Offers.
+- Teja Battula: Authentication, Profiles, Firebase, Community posts, Offers.
+- Andaluri SPVM Aditya: Authentication, All Pages UI, Community posts.
+- Vidhyabhushan Mallela: Plant Identification using Plant.id API, plant search using Perennial API.
+- Chetan Moturi: Please search using Perennial API.
+- VSKSS Narayana Rao: Group Chat, Offers.
 
 
 Note:
