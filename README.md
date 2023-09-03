@@ -70,3 +70,16 @@ The following are the features of our app. They are discussed in detail later in
 6. **Posts**: Users will see the posts from accounts they follow. They can also create posts by uploading images or just plain text!
 7. **Offerings**: Users can put up their produce for exchange on the offerings page, here other users can view and finalize deals.
 
+## Contributions
+Teja Battula: Authentication, Profiles, Firebase, Community posts, Offers
+Andaluri SPVM Aditya: Authentication, All Pages UI, Community posts
+Vidhyabhushan Mallela: Plant Identification using Plant.id API, plant search using Perennial API
+Chetan Moturi: Please search using Perennial API
+VSKSS Narayana Rao: Group Chat, Offers
+
+
+Note:
+Final version of the app is pushed to a new Node and it is made default. Hence no contributions from team members can be seen. All individual commits and contributions are done to the branch 'new-version'.
+
+
+
