@@ -66,15 +66,16 @@ The following are the features of our app. They are discussed in detail later in
 2. **Home Page**: Once logged in, The user is directed to the home page. Users can navigate from here to any app feature per the app flow.
 3. **Plant Search**: The plant searcher feature can be used to search for any plants among a database of over 10,000 plants! You need to enter the common/scientific name of the plant, and it will show the best suggestions. further details can be expanded by clicking upon one suggestion.
 4. **User Search**: Search your gardening friends by entering their email ID! A valid email will open the profile page where you can see and follow their recent posts.
-5. **Plant Id**: Search any plant by just their photo! upload using camera or gallery. Suggestion will contain probability with highest probability at top. Users can click on any suggestion to get more details. They can also get info about care guides and FAQs!
-6. **Posts**: Users will see the posts from accounts they follow. They can also create posts by uploading images or just plain text!
-7. **Offerings**: Users can put up their produce for exchange on the offerings page, here other users can view and finalize deals.
+5. **Plant Identification**: Search any plant by just their photo! upload using camera or gallery. Suggestion will contain probability with highest probability at top. Users can click on any suggestion to get more details. They can also get info about care guides and FAQs!
+6. **Disease Identification**: Check whether if a plant is healthy or not by uploading a clear pic of the the infected part of the plant. 
+7. **Posts**: Users will see the posts from accounts they follow. They can also create posts by uploading images or just plain text!
+8. **Offerings**: Users can put up their produce for exchange on the offerings page, here other users can view and finalize deals.
 
 ## Contributions
 - Teja Battula: Authentication, Profiles, Firebase, Community posts, Offers.
 - Andaluri SPVM Aditya: Authentication, All Pages UI, Community posts.
 - Vidhyabhushan Mallela: Plant Identification using Plant.id API, plant search using Perennial API.
-- Chetan Moturi: Plant search using Perennial API.
+- Chetan Moturi: Plant search using Perennial API, Integration of APIS.
 - VSKSS Narayana Rao: Group Chat, Offers.
 
 
